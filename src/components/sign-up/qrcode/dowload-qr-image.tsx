@@ -36,7 +36,9 @@ const DowloadQrImage = ({ color }: { color: string }) => {
       console.log(err)
     }
   }
-  return <Ionicons name="cloud-download-outline" size={40} color={color} iboe />
+  return (
+    <Ionicons name="cloud-download-outline" size={40} color={color} onPress={SaveQRcodeImage} />
+  )
 }
 
 export { DowloadQrImage }
