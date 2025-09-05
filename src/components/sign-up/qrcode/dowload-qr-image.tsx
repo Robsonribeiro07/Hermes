@@ -3,17 +3,14 @@ import { QRCodeStore } from '@/store/QRcode/qr-code-image-store'
 import { Ionicons } from '@expo/vector-icons'
 import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
-import qrcode from 'qrcode'
 const DowloadQrImage = ({ color }: { color: string }) => {
-  const { QRcode } = QRCodeStore()
-
+  const { QRcode, base64 } = QRCodeStore()
   const { granted, requestPermission } = useMediaLibraryPermission()
+
   const SaveQRcodeImage = async () => {
-    if (!QRcode) return
+    if (!QRcode || !base64) return
 
     try {
-      const base64 = await qrcode.toDataURL(QRcode)
-
       const filename = FileSystem.cacheDirectory + 'qrcode.png'
 
       await FileSystem.writeAsStringAsync(filename, base64, {

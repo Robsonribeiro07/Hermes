@@ -1,23 +1,25 @@
 import { IsignOut, IsignOutResponse, SignUpAPi } from '@/api/user/sign-up'
+import { QRCodeStore } from '@/store/QRcode/qr-code-image-store'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
+import uuid from 'react-native-uuid'
 import { useSocket } from '../socket/useSocket'
 import { useFormAuth } from './form'
-
-import uuid from 'react-native-uuid'
 
 export function useSignUp() {
   const { handleSubmit, control, errors, inputs, isSubmitting } = useFormAuth()
 
   const { connectSocket } = useSocket()
   const { replace } = useRouter()
+  const { setBase64 } = QRCodeStore()
 
   const { mutate, isPending, error } = useMutation<IsignOutResponse, Error, IsignOut>({
     mutationFn: (formData) => SignUpAPi(formData),
     onSuccess: (data) => {
-      const { QRcode } = data
+      const { QRcode, base64 } = data
 
-      console.log(QRcode)
+      setBase64(base64)
+
       replace({
         pathname: '/sign-up/qr/[qrCode]',
         params: { qrCode: encodeURIComponent(QRcode) },

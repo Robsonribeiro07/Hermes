@@ -6,7 +6,7 @@ export default function Middleware() {
 
   useFocusEffect(
     useCallback(() => {
-      push('/(public)/sign-up/qr/qrCode')
+      push('/(public)/sign-up')
     }, [push]),
   )
 

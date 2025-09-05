@@ -8,6 +8,7 @@ export interface IsignOut {
 export interface IsignOutResponse {
   QRcode: string
   message: string
+  base64: string
 }
 
 export async function SignUpAPi({ user, passowrd, id }: IsignOut): Promise<IsignOutResponse> {
