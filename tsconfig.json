@@ -4,21 +4,18 @@
     "strict": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": [
-        "./src/*",
-        "./*"
-      ],
-      "tailwind.config": [
-        "./tailwind.config.js"
-      ]
-    }
+      "@/*": ["./src/*"],
+      "tailwind.config": ["./tailwind.config.js"]
+    },
+    "jsx": "react-native",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts",
-    "src/theme/theme-context.tss"
+    "nativewind-env.d.ts"
   ]
 }

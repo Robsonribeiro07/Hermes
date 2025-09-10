@@ -2,7 +2,7 @@ import { useTheme } from '@/theme/theme-context'
 import { Text as RNText, TextProps, TextStyle } from 'react-native'
 
 interface ITextWithFont extends TextProps {
-  text?: string
+  text?: string | number
   size?: number
   weight?: TextStyle['fontWeight']
   color?: string

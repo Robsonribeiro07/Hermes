@@ -1,6 +1,7 @@
 import { useTheme } from '@/theme/theme-context'
 import { Ionicons } from '@expo/vector-icons'
 import AntDesign from '@expo/vector-icons/AntDesign'
+import { useRouter } from 'expo-router'
 import { TouchableOpacity, View } from 'react-native'
 import { ThemedText } from '../theme/themed-text'
 import ThemedView from '../theme/themed-view'
@@ -31,12 +32,15 @@ const Actions = ({ actions }: IActions) => {
   const { colors } = useTheme()
   const action = actionsConfig[actions]
 
+  const { push } = useRouter()
+
   const IconComponent = action.library === 'Ionicons' ? Ionicons : AntDesign
 
   return (
     <TouchableOpacity
       className="w-[48%] mt-4 h-48 rounded-2xl items-center justify-center"
       activeOpacity={0.6}
+      onPress={() => push('/(public)/sign-up')}
     >
       <ThemedView
         className="w-full mt-4 h-48 rounded-2xl items-center justify-center"

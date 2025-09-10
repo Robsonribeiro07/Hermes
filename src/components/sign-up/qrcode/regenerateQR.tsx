@@ -1,13 +1,29 @@
-import { Button, ButtonGroup, ButtonText } from '@/components/ui/button'
+import { Button, ButtonGroup, ButtonSpinner, ButtonText } from '@/components/ui/button'
+import { useRegenerateQRcode } from '@/hooks/bot/regenerate-qr-code'
 import { useTheme } from '@/theme/theme-context'
 
-const RegenerateQR = () => {
+const RegenerateQR = ({ disabled = false }: { disabled: boolean }) => {
   const { colors } = useTheme()
+
+  const { handleSubmitFn, isPending, timer, isError } = useRegenerateQRcode()
+
+  const buttonColor = isPending || timer || disabled ? colors.disabledButton : colors.buttonBlue
 
   return (
     <ButtonGroup className="w-full">
-      <Button className="rounded-3xl h-14" style={{ backgroundColor: colors.buttonBlue }}>
-        <ButtonText>Regenerate QR</ButtonText>
+      <Button
+        className="rounded-3pxl h-14 disabled:bg-red-500"
+        style={{ backgroundColor: buttonColor }}
+        onPress={handleSubmitFn}
+        disabled={isPending || timer || disabled}
+      >
+        {isPending ? (
+          <ButtonSpinner size={40} />
+        ) : isError ? (
+          <ButtonText>{isError}</ButtonText>
+        ) : (
+          <ButtonText>Regenerate QR</ButtonText>
+        )}
       </Button>
     </ButtonGroup>
   )

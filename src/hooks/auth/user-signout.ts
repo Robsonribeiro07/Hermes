@@ -1,54 +1,59 @@
 import { IsignOut, IsignOutResponse, SignUpAPi } from '@/api/user/sign-up'
-import { QRCodeStore } from '@/store/QRcode/qr-code-image-store'
+import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
+import { userStore } from '@/store/QRcode/user-store'
+import { setQRcodeStore } from '@/utils/bot/set-qr-code'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import uuid from 'react-native-uuid'
 import { useSocket } from '../socket/useSocket'
-import { useFormAuth } from './form'
 
 export function useSignUp() {
-  const { handleSubmit, control, errors, inputs, isSubmitting } = useFormAuth()
-
   const { connectSocket } = useSocket()
   const { replace } = useRouter()
-  const { setBase64 } = QRCodeStore()
+  const { setId } = userStore()
 
   const { mutate, isPending, error } = useMutation<IsignOutResponse, Error, IsignOut>({
     mutationFn: (formData) => SignUpAPi(formData),
     onSuccess: (data) => {
-      const { QRcode, base64 } = data
+      const { QRcode, base64, user, message, statusBot } = data
 
-      setBase64(base64)
+      console.log(user)
+      console.log(message, statusBot)
+      if (message === 'bot-connectado' && statusBot === true) {
+        console.log('Voce ja tem conta, so sera redicionado, e seu bot esta conectado')
+        replace('/(private)/(home)/home')
+        return
+      }
+
+      setQRcodeStore({ base64, qr: QRcode })
+      console.log(user.id)
+      setId(user.id)
 
       replace({
         pathname: '/sign-up/qr/[qrCode]',
         params: { qrCode: encodeURIComponent(QRcode) },
       })
-
-      console.log(data)
     },
     onError(error, variables, context) {
       console.log(error)
     },
   })
 
-  const handleSubmitFn = handleSubmit(async (formdata) => {
-    const id = uuid.v4()
-    await connectSocket(id)
+  const handleSubmitFn = async () => {
+    const localData = await getUserLocaledata()
 
-    const formdDataWithId = {
-      ...formdata,
-      id,
-    }
-    mutate(formdDataWithId)
-  })
+    const id = uuid.v4()
+
+    const data = localData?.id ?? id
+
+    await connectSocket(data)
+
+    mutate({ id: data })
+  }
 
   return {
-    control,
-    errors,
-    inputs,
-    isSubmitting: isSubmitting || isPending,
     mutationError: error,
+    isPending,
     handleSubmitFn,
   }
 }

@@ -1,25 +1,26 @@
 import api from '@/lib/axios'
 
 export interface IsignOut {
-  user: string
-  passowrd: string
   id: string
 }
 export interface IsignOutResponse {
   QRcode: string
-  message: string
+  message:
+    | 'bot-connectado'
+    | 'Usuario criado'
+    | 'Erro ao criar usuário'
+    | 'Houve um erro ao criar o bot'
+    | 'Erro interno no servidor'
   base64: string
+  user: {
+    id: string
+  }
+  statusBot: boolean
 }
 
-export async function SignUpAPi({ user, passowrd, id }: IsignOut): Promise<IsignOutResponse> {
-  const data = {
-    user,
-    passowrd,
-    id,
-  }
-
+export async function SignUpAPi({ id }: IsignOut): Promise<IsignOutResponse> {
   try {
-    const response = await api.post('user/create', data)
+    const response = await api.post('user/create', { id })
 
     return response.data
   } catch (err) {

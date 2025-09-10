@@ -4,12 +4,13 @@ import { usePathname, useRouter } from 'expo-router'
 import { TouchableOpacity } from 'react-native'
 import { ThemedText } from '../theme/themed-text'
 export interface INavItems {
-  Name: 'Home' | 'Groups' | 'Settings'
+  Name: 'Create' | 'Groups' | 'Settings'
   href: 'home' | 'groups' | 'settings'
+  onLongPress?: () => void
 }
 
 const Icons = {
-  Home: 'home-outline',
+  Create: 'add-circle-outline',
   Groups: 'people-outline',
   Settings: 'settings-outline',
 } as const
@@ -18,13 +19,13 @@ const NavColors = {
   dark: {
     checked: {
       true: '#4EA8DE',
-      false: '#ffffff',
+      false: '#212121',
     },
   },
   light: {
     checked: {
       true: '#4EA8DE',
-      false: '#000000',
+      false: '#757575',
     },
   },
 } as const
@@ -32,7 +33,7 @@ const NavColors = {
 type IconName = keyof typeof Icons
 type IconValue = (typeof Icons)[IconName]
 
-const NavItems = ({ Name, href }: INavItems) => {
+const NavItems = ({ Name, href, onLongPress }: INavItems) => {
   const { colors, mode } = useTheme()
   const checked = usePathname() === `/${href}`
 
@@ -42,7 +43,11 @@ const NavItems = ({ Name, href }: INavItems) => {
   const router = useRouter()
 
   return (
-    <TouchableOpacity className="items-center" onPress={() => router.push(`/${href}`)}>
+    <TouchableOpacity
+      className="items-center"
+      onPress={() => router.push(`/${href}`)}
+      onLongPress={onLongPress}
+    >
       <Ionicons name={Icons[Name] as IconValue} size={24} color={colorIconsChecked} />
       <ThemedText
         color={colorChecked}

@@ -3,15 +3,21 @@ import { NavBarFooter } from '@/components/footer/nav-bar'
 import Header from '@/components/header/header'
 import ThemedView from '@/components/theme/themed-view'
 import { useTheme } from '@/theme/theme-context'
-import { Slot } from 'expo-router'
+import { Slot, useSegments } from 'expo-router'
 
 export default function RootLayoutPrivate() {
+  const segments = useSegments()
+
   const { colors } = useTheme()
+
+  const hideHeaderScreen = ['settings', 'groups']
+
+  const showHeader = !hideHeaderScreen.includes(segments[segments.length - 1])
   return (
-    <ThemedView className="flex-1 ">
+    <ThemedView className="flex-1 " lightColor={colors.background}>
       <ThemedView className="flex-1 ">
-        <ThemedView className="flex-1 px-10 ">
-          <Header />
+        <ThemedView className="flex-1 px-8 ">
+          {showHeader && <Header />}
           <Slot
             screenOptions={{
               headerShown: false,

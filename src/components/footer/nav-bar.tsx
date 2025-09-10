@@ -4,7 +4,7 @@ import { INavItems, NavItems } from './nav-items'
 
 const navigationConfig: INavItems[] = [
   {
-    Name: 'Home',
+    Name: 'Create',
     href: 'home',
   },
   {
@@ -23,7 +23,7 @@ const NavBarFooter = () => {
   return (
     <SafeAreaView
       edges={['bottom']}
-      className={`${borderColor}  border-t-[1.2px] min-h-20 py-2 justify-end`}
+      className={`${borderColor}  border-t-[1.2px] min-h-20 py-2 justify-end `}
     >
       <View className="w-full flex-row justify-around gap-6">
         {navigationConfig.map((item) => (
