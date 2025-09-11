@@ -27,7 +27,7 @@ export default function ProfileScreen() {
         />
 
         <CardContentInfo
-          contactStatus={data?.lid}
+          contactStatus={data?.name}
           whatsappId={data?.id}
           isBusiness="Yes"
           lastSeen={

@@ -9,6 +9,7 @@ import { AvatarProfile } from '../user/avatar-profile'
 const Header = () => {
   const { colors, mode } = useTheme()
   const { data } = useSyncUserData()
+  useSyncUserData()
 
   return (
     <SafeAreaView edges={['top']}>

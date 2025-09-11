@@ -5,10 +5,8 @@ import { setQRcodeStore } from '@/utils/bot/set-qr-code'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
 import uuid from 'react-native-uuid'
-import { useSocket } from '../socket/useSocket'
 
 export function useSignUp() {
-  const { connectSocket } = useSocket()
   const { replace } = useRouter()
   const { setId } = userStore()
 
@@ -45,8 +43,6 @@ export function useSignUp() {
     const id = uuid.v4()
 
     const data = localData?.id ?? id
-
-    await connectSocket(data)
 
     mutate({ id: data })
   }

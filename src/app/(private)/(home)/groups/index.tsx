@@ -12,7 +12,6 @@ export default function GroupScreen() {
 
   const { groups } = useGroups()
 
-  console.log(groups?.map((g) => g.imgUrl))
   return (
     <ThemedView className="flex-1">
       <HeaderGroup />

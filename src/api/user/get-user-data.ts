@@ -41,6 +41,7 @@ export async function getUserData(): Promise<IuserWhatsappData | null> {
   const state = userStore.getState()
   const userId = userLocaleStorage?.id ?? state.userId
 
+  console.log('userid', userId)
   if (!userId) return null
 
   try {

@@ -46,6 +46,7 @@ export function useListtenQRCode() {
       handleConnected(id)
     }
     socket.on('bot-connected', uploadingHandler)
+    socket.once('uploading-data', uploadingHandler)
     socket.on('qrcode', ({ qr, base64 }: { qr: string; base64: string }) => {
       if (statusConnected === 'on') return
       setQRcodeStore({ qr, base64 })

@@ -18,13 +18,12 @@ export function useSyncUserData() {
 
       if (!remoteData) return localData
 
-      console.log('remote ', remoteData)
       await updateLocalUserdata(remoteData)
 
       return remoteData
     },
+    staleTime: 60 * 5 * 1000,
     refetchOnWindowFocus: false,
-    staleTime: 60 * 5 * 5,
   })
 
   useEffect(() => {

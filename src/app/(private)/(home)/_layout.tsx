@@ -2,10 +2,13 @@ import { App } from '@/components/app'
 import { NavBarFooter } from '@/components/footer/nav-bar'
 import Header from '@/components/header/header'
 import ThemedView from '@/components/theme/themed-view'
+import { useSyncUserData } from '@/hooks/database/use-sync-user-data'
 import { useTheme } from '@/theme/theme-context'
 import { Slot, useSegments } from 'expo-router'
 
 export default function RootLayoutPrivate() {
+  useSyncUserData()
+
   const segments = useSegments()
 
   const { colors } = useTheme()
