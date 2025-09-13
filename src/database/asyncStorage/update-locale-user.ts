@@ -4,18 +4,28 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 export async function updateLocalUserdata(newData: IuserWhatsappData) {
   try {
     const storeDataSt = await AsyncStorage.getItem('userData')
-    const storedData: IuserWhatsappData | null = storeDataSt ? JSON.parse(storeDataSt) : null
+    let storedData: IuserWhatsappData | null = null
 
-    const newUpdateAt = new Date(newData.connectedAt || 0).getTime()
+    if (storeDataSt) {
+      try {
+        storedData = JSON.parse(storeDataSt)
+      } catch (err) {
+        console.warn('Conteúdo antigo inválido no AsyncStorage, será sobrescrito.', storeDataSt)
+        storedData = null
+      }
+    }
 
-    const storeUpdateAt = storedData ? new Date(storedData.connectedAt || 0).getTime() : 0
+    const newUpdateAt = newData.connectedAt ? new Date(newData.connectedAt).getTime() : 0
+    const storeUpdateAt = storedData?.connectedAt ? new Date(storedData.connectedAt).getTime() : 0
 
     if (newUpdateAt > storeUpdateAt) {
-      console.log('dados mas recentes atualizado')
+      console.log('Dados mais recentes, atualizando...')
       await AsyncStorage.setItem('userData', JSON.stringify(newData))
     }
+
     return storedData
   } catch (err) {
-    console.log('Error ao atualizar')
+    console.error('Erro ao atualizar AsyncStorage', err)
+    return null
   }
 }

@@ -1,10 +1,9 @@
 import { IsignOut, IsignOutResponse, SignUpAPi } from '@/api/user/sign-up'
-import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
 import { userStore } from '@/store/QRcode/user-store'
 import { setQRcodeStore } from '@/utils/bot/set-qr-code'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import uuid from 'react-native-uuid'
 
 export function useSignUp() {
   const { replace } = useRouter()
@@ -38,13 +37,9 @@ export function useSignUp() {
   })
 
   const handleSubmitFn = async () => {
-    const localData = await getUserLocaledata()
+    const id = await AsyncStorage.getItem('userId')
 
-    const id = uuid.v4()
-
-    const data = localData?.id ?? id
-
-    mutate({ id: data })
+    mutate({ id: id! })
   }
 
   return {

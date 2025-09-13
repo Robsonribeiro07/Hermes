@@ -1,11 +1,12 @@
-import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
 import api from '@/lib/axios'
 import { userStore } from '@/store/QRcode/user-store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface IGroupParticipant {
   id: string
   isAdmin: boolean
   isSuperAdmin: boolean
+  imgUrl: string | undefined
 }
 
 export interface IGroup {
@@ -36,10 +37,8 @@ interface IUserWhatsappDataResponse {
 }
 
 export async function getUserData(): Promise<IuserWhatsappData | null> {
-  const userLocaleStorage = await getUserLocaledata()
-
   const state = userStore.getState()
-  const userId = userLocaleStorage?.id ?? state.userId
+  const userId = (await AsyncStorage.getItem('userId')) ?? state.userId
 
   console.log('userid', userId)
   if (!userId) return null

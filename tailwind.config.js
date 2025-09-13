@@ -178,6 +178,7 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
+        poppins: 'Poppins',
         jakarta: ['var(--font-plus-jakarta-sans)'],
         roboto: ['var(--font-roboto)'],
         code: ['var(--font-source-code-pro)'],
@@ -203,4 +204,4 @@ module.exports = {
       },
     },
   },
-};
+}

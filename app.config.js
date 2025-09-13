@@ -36,11 +36,7 @@ export default ({ config }) => ({
       edgeToEdgeEnabled: true,
       package: 'com.robson_ribeiro07.loop',
     },
-    web: {
-      bundler: 'metro',
-      output: 'static',
-      favicon: './src/assets/images/favicon.png',
-    },
+
     plugins: [
       'expo-router',
       [

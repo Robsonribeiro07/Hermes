@@ -22,16 +22,13 @@ export function useSyncUserData() {
 
       return remoteData
     },
-    staleTime: 60 * 5 * 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 60 * 5 * 100,
   })
 
   useEffect(() => {
     async function handleNewUserData(newData: any) {
       await updateLocalUserdata(newData)
-      console.log(newData)
 
-      console.log('infos recebida novas')
       queryClient.setQueryData(['user-data'], newData)
     }
 

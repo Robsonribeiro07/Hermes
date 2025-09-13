@@ -1,11 +1,19 @@
 import { Button, ButtonGroup, ButtonSpinner, ButtonText } from '@/components/ui/button'
 import { useRegenerateQRcode } from '@/hooks/bot/regenerate-qr-code'
 import { useTheme } from '@/theme/theme-context'
+import { useFocusEffect } from 'expo-router'
+import { useCallback } from 'react'
 
 const RegenerateQR = ({ disabled = false }: { disabled: boolean }) => {
   const { colors } = useTheme()
 
   const { handleSubmitFn, isPending, timer, isError } = useRegenerateQRcode()
+
+  useFocusEffect(
+    useCallback(() => {
+      handleSubmitFn()
+    }, []),
+  )
 
   const buttonColor = isPending || timer || disabled ? colors.disabledButton : colors.buttonBlue
 
