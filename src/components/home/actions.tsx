@@ -20,6 +20,7 @@ const actionsConfig: Record<
     label: string
     icon: string
     library: IconLibrary
+    href?: string
   }
 > = {
   CreateRaffle: { label: 'Create Raffle', icon: 'plus', library: 'AntDesign' },
@@ -40,7 +41,7 @@ const Actions = ({ actions }: IActions) => {
     <TouchableOpacity
       className="w-[48%] mt-4 h-48 rounded-2xl items-center justify-center"
       activeOpacity={0.6}
-      onPress={() => push('/(public)/sign-up')}
+      onPress={() => push('/(private)/chats/chat/[id]')}
     >
       <ThemedView
         className="w-full mt-4 h-48 rounded-2xl items-center justify-center"

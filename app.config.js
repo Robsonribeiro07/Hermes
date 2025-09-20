@@ -2,17 +2,17 @@ export default ({ config }) => ({
   ...config,
   expo: {
     ...config.expo,
-    name: 'loop',
-    slug: 'loop',
+    name: 'Hermes',
+    slug: 'Hermes',
     version: '1.0.0',
     orientation: 'portrait',
     icon: './src/assets/images/icon.png',
     scheme: 'loop',
     userInterfaceStyle: 'automatic',
     newArchEnabled: true,
-    plugins: {},
     ios: {
       supportsTablet: true,
+      bundleIdentifier: 'com.robsonribeiro07.loop',
       infoPlist: {
         NSAppTransportSecurity: {
           NSExceptionDomains: {
@@ -29,9 +29,11 @@ export default ({ config }) => ({
       },
     },
     android: {
+      jsEngine: 'hermes',
+
       adaptiveIcon: {
         foregroundImage: './src/assets/images/adaptive-icon.png',
-        backgroundColor: '#ffffff',
+        backgroundColor: '#F8F8F8',
       },
       edgeToEdgeEnabled: true,
       package: 'com.robson_ribeiro07.loop',
@@ -39,15 +41,16 @@ export default ({ config }) => ({
 
     plugins: [
       'expo-router',
+      'expo-dev-client',
       [
         'expo-splash-screen',
         {
           image: './src/assets/images/splash-art.png',
-          imageWidth: 200,
-          resizeMode: 'contain',
-          backgroundColor: '#ffffff',
+          resizeMode: 'cover',
         },
       ],
+      'expo-notifications',
+
       [
         'expo-build-properties',
         {
@@ -65,10 +68,12 @@ export default ({ config }) => ({
       eas: {
         projectId: '442972f5-067f-41d0-8f06-c3d76969d277',
       },
-      apiUrl:
+      apirUrl:
         process.env.APP_ENV === 'production'
           ? 'https://bot-whatsapp-sepia.vercel.app'
-          : process.env.EXPO_PUBLIC_SOCKET_URL || 'http://10.0.0.109:3000',
+          : process.env.APP_ENV === 'emulator'
+          ? process.env.EXPO_PUBLIC_URL_API_DEV
+          : process.env.EXPO_PUBLIC_URL_API || 'http://10.0.0.109:3000',
     },
   },
 })

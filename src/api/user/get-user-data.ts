@@ -1,6 +1,5 @@
+import { getUserId } from '@/database/MMKV/get-user-id'
 import api from '@/lib/axios'
-import { userStore } from '@/store/QRcode/user-store'
-import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export interface IGroupParticipant {
   id: string
@@ -37,10 +36,8 @@ interface IUserWhatsappDataResponse {
 }
 
 export async function getUserData(): Promise<IuserWhatsappData | null> {
-  const state = userStore.getState()
-  const userId = (await AsyncStorage.getItem('userId')) ?? state.userId
+  const userId = getUserId()
 
-  console.log('userid', userId)
   if (!userId) return null
 
   try {

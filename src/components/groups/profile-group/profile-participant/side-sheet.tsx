@@ -1,6 +1,7 @@
 import { SideModal } from '@/components/side-modal'
 import React from 'react'
 import { View } from 'react-native'
+import { DemoteToAdmin } from './demote-to-admin'
 import { DetailsProfile } from './details'
 import { HeaderProfileParticipant } from './header'
 import { PromoteToAdmin } from './promote-to-admin'
@@ -15,6 +16,7 @@ type SideModalProps = {
   isAdmin: boolean | undefined
   id: string | undefined
   groupId: string
+  userId: string | undefined
 }
 
 export const SideSheet: React.FC<SideModalProps> = ({
@@ -24,6 +26,7 @@ export const SideSheet: React.FC<SideModalProps> = ({
   name,
   isAdmin,
   id,
+  userId,
   groupId,
 }) => {
   return (
@@ -36,8 +39,9 @@ export const SideSheet: React.FC<SideModalProps> = ({
           <DetailsProfile />
           <View className="mt-10 gap-5">
             <SendMessage />
-            <RemoveFromGroup id={id} groupId={groupId} onClose={onClose} />
-            <PromoteToAdmin />
+            {userId !== id && <RemoveFromGroup groupId={groupId} participantId={id!} />}
+            {!isAdmin && userId !== id && <PromoteToAdmin groupId={groupId} participantId={id} />}
+            {isAdmin && userId !== id && <DemoteToAdmin groupId={groupId} participantId={id} />}
           </View>
         </View>
       }

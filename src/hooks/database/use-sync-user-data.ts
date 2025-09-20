@@ -1,6 +1,6 @@
 import { getUserData } from '@/api/user/get-user-data'
-import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
-import { updateLocalUserdata } from '@/database/asyncStorage/update-locale-user'
+import { getUserLocaledata } from '@/database/MMKV/get-user-locale-data'
+import { updateLocalUserdata } from '@/database/MMKV/update-locale-user'
 import { getSocketServices } from '@/services/socket'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import { useEffect } from 'react'
@@ -14,7 +14,7 @@ export function useSyncUserData() {
     queryKey: ['user-data'],
     queryFn: async () => {
       const remoteData = await getUserData()
-      const localData = await getUserLocaledata()
+      const localData = getUserLocaledata()
 
       if (!remoteData) return localData
 
@@ -22,12 +22,13 @@ export function useSyncUserData() {
 
       return remoteData
     },
-    staleTime: 60 * 5 * 100,
+    staleTime: 60 * 5 * 1000,
+    refetchOnWindowFocus: false,
   })
 
   useEffect(() => {
     async function handleNewUserData(newData: any) {
-      await updateLocalUserdata(newData)
+      updateLocalUserdata(newData)
 
       queryClient.setQueryData(['user-data'], newData)
     }

@@ -13,7 +13,6 @@ export async function RemoveToParticipantGroup({
 }: IRemoveToParticipant): Promise<IuserWhatsappData | null> {
   const userId = await AsyncStorage.getItem('userId')
 
-  console.log(userId)
   if (!userId) {
     console.warn('user no found asyc storage')
   }

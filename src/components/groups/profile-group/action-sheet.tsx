@@ -6,28 +6,42 @@ import {
   ActionsheetDragIndicator,
   ActionsheetDragIndicatorWrapper,
 } from '@/components/ui/actionsheet'
-import { useState } from 'react'
+import { push } from 'expo-router/build/global-state/routing'
+import { useEffect, useState } from 'react'
 import AddMembers from './add-members'
 import HeaderGroupInfo from './header-group-info'
 import Members from './members'
 import { SideSheet } from './profile-participant/side-sheet'
 
-const ActionSheetProfileGroup = ({
-  GroupData,
-  handleClose,
-}: {
+interface ActionSheetProfileGroupProps {
   GroupData: IGroup | undefined
   handleClose: () => void
-}) => {
-  if (!GroupData) return null
+}
 
+const ActionSheetProfileGroup = ({ GroupData, handleClose }: ActionSheetProfileGroupProps) => {
   const [open, setOpen] = useState(false)
-
   const [participantData, setParticipatnData] = useState<IGroupParticipant>()
 
-  const handleCloseProfile = () => setOpen(!open)
+  useEffect(() => {
+    if (!GroupData) return
+    const finderSelectParticipantData = GroupData.participants.find(
+      (p) => p.id === participantData?.id,
+    )
+    if (finderSelectParticipantData) {
+      setParticipatnData(finderSelectParticipantData)
+    }
+  }, [GroupData, participantData?.id])
 
-  const handleOpen = (participant: IGroupParticipant) => {
+  if (!GroupData) return null
+
+  const handleCloseProfile = () => setOpen((prev) => !prev)
+
+  const handleOpen = async (participant: IGroupParticipant) => {
+    if (participant.id === GroupData.owner) {
+      push('/(private)/(home)/settings')
+      return
+    }
+
     setOpen(true)
     setParticipatnData(participant)
   }
@@ -46,7 +60,7 @@ const ActionSheetProfileGroup = ({
           name={GroupData.subject}
           members={GroupData.participants.length}
         />
-        <AddMembers />
+        <AddMembers groupdId={GroupData.id} />
         <Members members={GroupData.participants} onPress={handleOpen} />
       </ActionsheetContent>
 
@@ -58,6 +72,7 @@ const ActionSheetProfileGroup = ({
         id={participantData?.id}
         isAdmin={participantData?.isAdmin}
         groupId={GroupData.id}
+        userId={GroupData.owner}
       />
     </Actionsheet>
   )

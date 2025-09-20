@@ -22,7 +22,7 @@ const ThemedText = ({
   ...props
 }: ITextWithFont) => {
   const { colors, mode } = useTheme()
-  const colorTheme = mode === 'dark' ? darkColor ?? colors.text : lightColor ?? colors.text
+  const colorTheme = mode === 'dark' ? darkColor ?? colors.primary : lightColor ?? colors.text
 
   return (
     <RNText

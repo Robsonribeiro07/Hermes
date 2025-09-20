@@ -42,6 +42,7 @@ export function useListtenQRCode() {
     }
 
     const uploadingHandler = (id: string) => {
+      console.log('aqui')
       setOpen()
       handleConnected(id)
     }

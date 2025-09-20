@@ -1,11 +1,9 @@
 import ThemedView from '@/components/theme/themed-view'
 import { Image } from '@/components/ui/image'
 import { QRCodeStore } from '@/store/QRcode/qr-code-image-store'
-import QRcode from 'react-native-qrcode-svg'
 const ContentQrCode = () => {
-  const { QRcode: qr } = QRCodeStore()
+  const { base64: qr } = QRCodeStore()
 
-  console.log(qr)
   return (
     <ThemedView
       className="h-full rounded-2xl w-full justify-center items-center"
@@ -13,7 +11,7 @@ const ContentQrCode = () => {
       darkColor="#333333"
     >
       {qr ? (
-        <QRcode value={qr} size={300} color="black" quietZone={10} />
+        <Image source={qr} width={500} height={500} className="w-full h-full" alt="qrcode" />
       ) : (
         <Image
           source={{
