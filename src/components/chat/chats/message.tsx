@@ -1,15 +1,15 @@
-import { MessageImgWithLoading } from '@/components/IA/chat/message-img-with-loading'
 import { ThinkingMessage } from '@/components/IA/chat/thiking-message'
 import { Box } from '@/components/ui/box'
 import { AvatarProfile } from '@/components/user/avatar-profile'
+import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import { Text } from 'react-native'
+import { mediaMap } from './map-media'
 
-export type IMessageType = 'text' | 'img'
 export interface IMessage {
   content: string
-  type?: IMessageType
+  type?: MediaType
   date: Date
-  id?: string
+  id?: string | undefined
   fromMe?: boolean
   thinkingMessage?: boolean
   isComplete?: boolean
@@ -28,7 +28,7 @@ export function MessageChat({
 }: IMessage) {
   const newDate = new Date(date)
 
-  console.log(id)
+  const ComponentRenderMedia = mediaMap[type]
   return (
     <Box className="w-full my-2 min-h-[100px] " id={id}>
       {thinkingMessage ? (
@@ -46,13 +46,13 @@ export function MessageChat({
             fromMe ? 'bg-[#4CAF7F] ml-auto' : 'bg-gray-200 mr-auto ml-10'
           }`}
         >
-          {type === 'text' ? (
-            <Text className={`font-poppins font-light ${fromMe ? 'text-white' : 'text-black'}`}>
-              {content}
-            </Text>
-          ) : (
-            <MessageImgWithLoading content={content} isComplete={isComplete} id={id} />
-          )}
+          <ComponentRenderMedia
+            content={content}
+            fromMe={fromMe}
+            id={id}
+            isComplete={isComplete}
+            key={id}
+          />
         </Box>
       )}
 

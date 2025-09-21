@@ -4,15 +4,15 @@ import LottieView from 'lottie-react-native'
 interface IMessageImg {
   isComplete: boolean
   content: string
-  id: string
+  id?: string
 }
-export function MessageImgWithLoading({ isComplete, content, id }: IMessageImg) {
-  return isComplete ? (
+export function ImageMedia({ isComplete, content, id }: IMessageImg) {
+  return content ? (
     <Image
       className="w-full h-auto"
       source={{
         uri: content,
-        height: 300,
+        height: 400,
       }}
       alt={id}
     />

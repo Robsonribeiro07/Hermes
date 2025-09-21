@@ -1,10 +1,11 @@
 import { mmkvStorage } from '@/database/MMKV/conctact'
+import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
 type IContentMessage = {
   content: string
-  type: 'text' | 'img'
+  type: MediaType
   date: string
   fromMe: boolean
   id: string
@@ -51,6 +52,6 @@ export const useChatStore = create<IChatStore>()(
         }
       },
     }),
-    { name: 'chats-messagessss', storage: mmkvStorage },
+    { name: 'chats-messagesssss', storage: mmkvStorage },
   ),
 )
