@@ -5,23 +5,24 @@ import { useEffect } from 'react'
 
 export function useChatMessageHandler() {
   const socket = getSocketServices()
-  const { addMessage } = useChatStore()
+  const { addMessage, updateUriMediaLocal } = useChatStore()
 
   useEffect(() => {
     socket.on('new-message-user-received', async ({ user, message }: typeDataReceived) => {
-      if (message.type === 'image') {
-        const localUri = await SaveImageToDevice(message.content, message.type)
+      if (message.type === 'image' || message.type === 'video') {
         addMessage(user, {
           ...message,
-          content: localUri,
+          content: message.content,
+        })
+
+        await SaveImageToDevice(message.content, message.type).then((uri) => {
+          console.log(uri)
+          console.log('media baixado uri sendo trocada')
+          updateUriMediaLocal(user.id, uri, message.id)
         })
 
         return
       }
-
-      console.log(message)
-
-      addMessage(user, message)
     })
   }, [])
 }

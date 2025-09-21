@@ -9,6 +9,7 @@ type IContentMessage = {
   date: string
   fromMe: boolean
   id: string
+  thumbnail?: string
 }
 
 type IUserMessage = {
@@ -29,6 +30,7 @@ export interface IUserChat {
 interface IChatStore {
   chats: IUserChat[]
   addMessage: (user: IUserMessage, mesage: IContentMessage) => void
+  updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) => void
 }
 
 export const useChatStore = create<IChatStore>()(
@@ -51,7 +53,20 @@ export const useChatStore = create<IChatStore>()(
           })
         }
       },
+      updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) =>
+        set((state) => ({
+          chats: state.chats.map((c) =>
+            c.user.id === userId
+              ? {
+                  ...c,
+                  messages: c.messages.map((m) =>
+                    m.id === messageId ? { ...m, content: newMessage } : m,
+                  ),
+                }
+              : c,
+          ),
+        })),
     }),
-    { name: 'chats-messagesssss', storage: mmkvStorage },
+    { name: 'chats-ms', storage: mmkvStorage },
   ),
 )

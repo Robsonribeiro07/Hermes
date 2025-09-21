@@ -1,30 +1,19 @@
 import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import React from 'react'
 import { Text } from 'react-native'
-import Video from 'react-native-video'
 import { ImageMedia } from './Media/image'
+import { VideoMedia } from './Media/video'
 
 type IMediaMapProps = {
   content: string
   isComplete: boolean
   id?: string
   fromMe: boolean | undefined
+  thumbnail?: string
 }
 export const mediaMap: Record<MediaType, (props: IMediaMapProps) => React.ReactNode> = {
   image: (props) => <ImageMedia {...props} />,
-  video: (props) => (
-    <Video
-      source={{
-        uri: props.content,
-      }}
-      resizeMode="cover"
-      controls
-      style={{
-        width: 300,
-        height: 300,
-      }}
-    />
-  ),
+  video: (props) => <VideoMedia uri={props.content} thumbnail={props.thumbnail} />,
   gif: (props) => <ImageMedia {...props} />,
   'thumbnail-image': (props) => <ImageMedia {...props} />,
   'thumbnail-document': (props) => <ImageMedia {...props} />,

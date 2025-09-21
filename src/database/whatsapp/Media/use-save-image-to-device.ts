@@ -2,15 +2,17 @@ import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
 import { MediaType } from './typed-media'
 
-export async function SaveImageToDevice(mediaUrl: string, type: MediaType, fileName?: string) {
+export async function SaveImageToDevice(mediaUrl: string, type: MediaType) {
   const urlExtension = type === 'image' ? 'jpg' : type === 'video' ? 'mp4' : ''
 
-  const safeFileName =
-    fileName?.replace(/[^a-z0-9]/gi, '_').toLowerCase() || `${type}-${Date.now()}.${urlExtension}`
+  const safeFileName = `${type}-${Date.now()}.${urlExtension}`
 
   const path = FileSystem.cacheDirectory + safeFileName
 
   const downloaded = await FileSystem.downloadAsync(mediaUrl, path)
+
+  console.log(type)
+  console.log('baixei')
 
   const asset = await MediaLibrary.createAssetAsync(downloaded.uri)
 
@@ -21,5 +23,5 @@ export async function SaveImageToDevice(mediaUrl: string, type: MediaType, fileN
     await MediaLibrary.addAssetsToAlbumAsync([asset], album, false)
   }
 
-  return asset.uri
+  return downloaded.uri
 }
