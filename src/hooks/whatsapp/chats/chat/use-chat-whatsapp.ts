@@ -1,50 +1,22 @@
-import { useChatWhatsappStore } from '@/store/chats/chat-store'
+import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
+import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 
 export function useChatWhatsapp() {
-  const messages = [
-    {
-      id: '1',
-      content: 'Olá, tudo bem?',
-      date: '2025-09-19',
-      fromMe: true,
-      thinkingMessage: false,
-      type: 'text',
-      isComplete: true,
-    },
-    {
-      id: '2',
-      content: 'Tudo ótimo! E você?',
-      date: '2025-09-19',
-      fromMe: false,
-      thinkingMessage: false,
-      type: 'text',
-      isComplete: true,
-    },
-    {
-      id: '3',
-      content: 'Mensagem de outro dia',
-      date: '2025-09-19',
-      fromMe: true,
-      thinkingMessage: false,
-      type: 'text',
-      isComplete: true,
-    },
-    {
-      id: '4',
-      content: 'Teste com outra data',
-      date: '2025-09-19',
-      fromMe: false,
-      thinkingMessage: false,
-      type: 'text',
-      isComplete: true,
-    },
-  ]
-
   const { FilterMessages, inputTextFilter } = useChatWhatsappStore()
+  const { chats } = useChatStore()
 
   const userFilter = FilterMessages.find((u) => u.userId === '12')
 
-  const filteredMessages = messages.filter((m) => {
+  const findChatUser = chats.find((u) => u.user.id === '557582598725@s.whatsapp.net')
+
+  if (!findChatUser) {
+    return {
+      regex: inputTextFilter ? new RegExp(`(${inputTextFilter})`, 'i') : null,
+      filteredMessages: [],
+      inputTextFilter,
+    }
+  }
+  const filteredMessages = findChatUser.messages.filter((m) => {
     const matchData = userFilter?.date.toString()
       ? m.date.toString() === userFilter.date.toString()
       : true
@@ -55,10 +27,12 @@ export function useChatWhatsapp() {
 
     return matchData && matchText
   })
+
   const regex = new RegExp(`(${inputTextFilter})`, 'i')
 
   return {
     regex,
+    user: findChatUser,
     filteredMessages,
     inputTextFilter,
   }

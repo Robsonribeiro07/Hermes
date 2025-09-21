@@ -39,12 +39,12 @@ export default function GroupScreen() {
             contentContainerStyle={{ alignItems: 'center', paddingBottom: 40, paddingTop: 30 }}
             showsVerticalScrollIndicator={false}
           >
+              <ThemedText/>
             <ThemedText
               text="Meus Grupos"
               className="mt-3  text-left w-full"
               lightColor={colors.primary}
             />
-
             {groups?.map((g) => (
               <GroupsInfos
                 onPress={() => handleGroup(g)}

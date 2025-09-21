@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 export function useNotificationListener() {
   useEffect(() => {
     const subscription1 = Notifications.addNotificationReceivedListener((notification) => {
-      console.log('Notificação recebida:', notification)
+      console.log('Notification recebida:', notification)
     })
 
     const subscription2 = Notifications.addNotificationResponseReceivedListener((response) => {

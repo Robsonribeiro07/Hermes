@@ -9,7 +9,7 @@ export const mmkvStorage: PersistStorage<IUserContactStore> = {
     try {
       return JSON.parse(value)
     } catch (err) {
-      console.warn('Erro ao ler dados do MMKV, valor inválido:', value)
+      console.warn("Error ao ler dados do MMKV, valor inválido:", value)
       return null
     }
   },

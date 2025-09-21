@@ -7,6 +7,7 @@ interface IMessageImg {
   id: string
 }
 export function MessageImgWithLoading({ isComplete, content, id }: IMessageImg) {
+  console.log(content)
   return isComplete ? (
     <Image
       className="w-full h-auto"

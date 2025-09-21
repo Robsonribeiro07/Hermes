@@ -1,5 +1,5 @@
 import { Menu, MenuItem } from '@/components/ui/menu'
-import { useChatWhatsappStore } from '@/store/chats/chat-store'
+import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { Ionicons } from '@expo/vector-icons'
 import { Text, TouchableOpacity } from 'react-native'
 

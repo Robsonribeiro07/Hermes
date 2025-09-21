@@ -1,5 +1,5 @@
 import { Modal, ModalBackdrop, ModalContent } from '@/components/ui/modal'
-import { useChatWhatsappStore } from '@/store/chats/chat-store'
+import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { Ionicons } from '@expo/vector-icons'
 import { Calendar, LocaleConfig } from 'react-native-calendars'
 
@@ -48,11 +48,18 @@ export function SelectedDate({ userId }: ISelectDate) {
 
   const handleSetDate = (date: string) => {
     handleHideCalendar()
+    console.log('aqui')
     setDate(userId, date)
   }
   return (
     <>
-      <Ionicons name="calendar-outline" size={30} color="#47500" onPress={handlShowCalendar} />
+      <Ionicons
+        name="calendar-outline"
+        size={30}
+        color="#60A5FA"
+        onPress={handlShowCalendar}
+        style={{ elevation: 10 }}
+      />
 
       <Modal isOpen={showCalendar} onClose={handleHideCalendar}>
         <ModalBackdrop />

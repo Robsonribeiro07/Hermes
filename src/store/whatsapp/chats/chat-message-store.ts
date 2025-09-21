@@ -4,7 +4,7 @@ import { persist } from 'zustand/middleware'
 
 type IContentMessage = {
   content: string
-  type: 'text' | 'string'
+  type: 'text' | 'img'
   date: string
   fromMe: boolean
   id: string
@@ -40,7 +40,9 @@ export const useChatStore = create<IChatStore>()(
         const userChat = chats.find((c) => c.user.id === user.id)
 
         if (userChat) {
-          userChat.messages.push(message)
+          if (!userChat.messages.includes(message)) {
+            userChat.messages.unshift(message)
+          }
           set({ chats: [...chats] })
         } else {
           set({
@@ -49,6 +51,6 @@ export const useChatStore = create<IChatStore>()(
         }
       },
     }),
-    { name: 'chat-message', storage: mmkvStorage },
+    { name: 'chats-messagessss', storage: mmkvStorage },
   ),
 )

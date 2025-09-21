@@ -8,6 +8,7 @@ export function useSocket() {
 
       socket.emit('register', _id)
 
+
       clearTimeout(timeout)
       resolve(_id)
     })

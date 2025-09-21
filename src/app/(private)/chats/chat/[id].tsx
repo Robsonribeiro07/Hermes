@@ -4,8 +4,9 @@ import { HeaderChat } from '@/components/chat/chats/header'
 import { SearchMessages } from '@/components/chat/chats/search-messages'
 import ThemedView from '@/components/theme/themed-view'
 import { useBackHandler } from '@/hooks/use-back-handler'
-import { useChatWhatsappStore } from '@/store/chats/chat-store'
+import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { useEffect } from 'react'
+import { ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 
 export default function Chat() {
   const { FilterMessages, removeFilter, setFilterMessages } = useChatWhatsappStore()
@@ -28,13 +29,25 @@ export default function Chat() {
   })
 
   return (
-    <ThemedView className="flex-1 px-4">
-      <HeaderChat />
-      {showSearch && <SearchMessages />}
+    <ImageBackground
+      className="flex-1"
+      source={require('../../../../assets/images/background-chat.jpeg')}
+    >
+      <ThemedView className="flex-1 ">
+        {showSearch && <SearchMessages />}
 
-      <ContentMessage />
+        <KeyboardAvoidingView
+          className="w-full"
+          style={{ flex: 1 }}
+          behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+          keyboardVerticalOffset={Platform.OS === 'ios' ? 60 : 0}
+        >
+          <HeaderChat />
 
-      <Footer />
-    </ThemedView>
+          <ContentMessage />
+          <Footer />
+        </KeyboardAvoidingView>
+      </ThemedView>
+    </ImageBackground>
   )
 }

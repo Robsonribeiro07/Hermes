@@ -1,5 +1,5 @@
 import { Input, InputField } from '@/components/ui/input'
-import { useChatWhatsappStore } from '@/store/chats/chat-store'
+import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { SelectedDate } from './menu-options/selected-date'
 
@@ -12,9 +12,9 @@ export function SearchMessages() {
   return (
     <SafeAreaView
       edges={['top']}
-      className="flex-row justify-between w-screen items-center py-4 absolute top-0  px-2 "
+      className="flex-row justify-between w-screen items-center py-4 absolute top-0  px-2 z-10"
       style={{
-        elevation: 5,
+        elevation: 10,
       }}
     >
       <Input className="w-full h-16 bg-slate-600 rounded-2xl px-2">

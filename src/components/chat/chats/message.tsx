@@ -9,10 +9,11 @@ export interface IMessage {
   content: string
   type?: IMessageType
   date: Date
-  id: string
+  id?: string
   fromMe?: boolean
   thinkingMessage?: boolean
   isComplete?: boolean
+  imgUrl: string | undefined
 }
 
 export function MessageChat({
@@ -23,11 +24,13 @@ export function MessageChat({
   thinkingMessage = false,
   type = 'text',
   isComplete = false,
+  imgUrl,
 }: IMessage) {
   const newDate = new Date(date)
 
+  console.log(id)
   return (
-    <Box className="w-full  min-h-[100px] " id={id}>
+    <Box className="w-full my-2 min-h-[100px] " id={id}>
       {thinkingMessage ? (
         <ThinkingMessage />
       ) : (
@@ -54,13 +57,7 @@ export function MessageChat({
       )}
 
       <Box className={`flex-row  items-center gap-3 ${fromMe ? 'ml-auto ' : 'mr-auto'}`}>
-        {!fromMe && (
-          <AvatarProfile
-            ImgUrl={
-              'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMdM9MEQ0ExL1PmInT3U5I8v63YXBEdoIT0Q&s'
-            }
-          />
-        )}
+        {!fromMe && <AvatarProfile ImgUrl={imgUrl} />}
         <Text className="font-poppins text-primary-300">
           {newDate.toLocaleDateString([], { hour: '2-digit', minute: '2-digit' }).slice(10)}
         </Text>
