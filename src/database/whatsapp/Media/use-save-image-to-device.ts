@@ -1,34 +1,40 @@
 import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
+import { MediaType } from './typed-media'
 
-type MediaType = 'image' | 'video' | 'audio'
-
+const extensions: Record<MediaType, string> = {
+  image: 'jpg',
+  video: 'mp4',
+  audio: 'mp3',
+  document: 'pdf',
+  'thumbnail-document': 'jpg',
+  'thumbnail-video': 'jpg',
+  text: 'txt',
+  sticker: 'webp',
+  'thumbnail-image': 'jpg',
+  'thumbnail-link': 'jpg',
+  gif: 'gif',
+  ppic: 'jpg',
+  product: 'jpg',
+  ptt: 'mp3',
+  ptv: 'mp4',
+}
 export async function saveMediaToDevice(mediaUrl: string, type: MediaType) {
-  const extensions = { image: 'jpg', video: 'mp4', audio: 'mp3' }
-  const ext = extensions[type]
+  const urlExtension = extensions[type] || 'jpg'
+  const safeFileName = `${type}-${Date.now()}.${urlExtension}`
 
-  const fileName = `${type}-${Date.now()}.${ext}`
-  const hermesFolder = FileSystem.documentDirectory + 'Hermes/'
-  const filePath = hermesFolder + fileName
+  const path = FileSystem.cacheDirectory + safeFileName
 
-  const folderInfo = await FileSystem.getInfoAsync(hermesFolder)
-  if (!folderInfo.exists) {
-    await FileSystem.makeDirectoryAsync(hermesFolder, { intermediates: true })
-  }
-  const downloaded = await FileSystem.downloadAsync(mediaUrl, filePath)
+  const downloaded = await FileSystem.downloadAsync(mediaUrl, path)
 
   const asset = await MediaLibrary.createAssetAsync(downloaded.uri)
 
-  const addToAlbum = async (albumName: string) => {
-    let album = await MediaLibrary.getAlbumAsync(albumName)
-    if (!album) {
-      await MediaLibrary.createAlbumAsync(albumName, asset, false)
-    } else {
-      await MediaLibrary.addAssetsToAlbumAsync([asset], album, false)
-    }
+  let album = await MediaLibrary.getAlbumAsync(type)
+  if (!album) {
+    await MediaLibrary.createAlbumAsync(type, asset, false)
+  } else {
+    await MediaLibrary.addAssetsToAlbumAsync([asset], album, false)
   }
 
-  await addToAlbum('Hermes')
-  await addToAlbum(`Hermes - ${type}`)
   return downloaded.uri
 }

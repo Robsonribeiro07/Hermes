@@ -35,7 +35,7 @@ const AvatarProfile = ({ size, ImgUrl, withBorder = false }: IAvatarProfile) => 
       </Avatar>
     </View>
   ) : (
-    <Avatar size={size} onTouchStart={() => push('/(public)/sign-up')}>
+    <Avatar size={size}>
       <AvatarFallbackText>R</AvatarFallbackText>
       <AvatarImage
         source={{

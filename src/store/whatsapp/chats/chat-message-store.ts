@@ -44,6 +44,10 @@ export const useChatStore = create<IChatStore>()(
 
         if (userChat) {
           if (!userChat.messages.includes(message)) {
+            if (userChat.messages.some((m) => m.id === message.id)) {
+              console.error('mensagem ja existe no chat')
+              return
+            }
             userChat.messages.unshift(message)
           }
           set({ chats: [...chats] })
@@ -67,6 +71,6 @@ export const useChatStore = create<IChatStore>()(
           ),
         })),
     }),
-    { name: 'chats-ms', storage: mmkvStorage },
+    { name: 'chats-msvbsbss', storage: mmkvStorage },
   ),
 )
