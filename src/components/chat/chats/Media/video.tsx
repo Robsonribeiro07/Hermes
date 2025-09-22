@@ -1,58 +1,82 @@
 import { Ionicons } from '@expo/vector-icons'
-import { Video } from 'expo-av'
 import { View } from 'moti'
-import { useState } from 'react'
-import { Image, TouchableOpacity } from 'react-native'
+import { useRef, useState } from 'react'
+import { Image, Pressable, TouchableOpacity } from 'react-native'
+import Video from 'react-native-video'
 
 interface IVideoMedia {
   uri: string
   thumbnail?: string
 }
+
 export function VideoMedia({ uri, thumbnail }: IVideoMedia) {
   const [isPlaying, setIsPlaying] = useState(true)
-  const [currentime, setCurrenTime] = useState(0)
+  const [fullScreen, setFullScreen] = useState(false)
+  const [lastTap, setLastTap] = useState<number | null>(null)
+  const videoRef = useRef<any>(null)
+  const DOUBLE_TAP_DELAY = 300
 
+  const handleDoubleTap = () => {
+    const now = Date.now()
+    if (lastTap && now - lastTap < DOUBLE_TAP_DELAY) {
+      setFullScreen(true)
+    }
+    setLastTap(now)
+  }
   const togglePlayPause = () => {
     setIsPlaying((p) => !p)
   }
 
+  const resetCurrentTimePause = () => {
+    if (videoRef.current) {
+      videoRef.current.seek(0)
+      setIsPlaying(true)
+    }
+  }
+  const handleFullScren = () => setFullScreen((f) => !f)
   return thumbnail ? (
     <Image source={{ uri }} width={300} height={300} />
   ) : (
-    <View className="items-center justify-center relative">
-      {!isPlaying ? (
-        <Ionicons
-          name="pause"
-          className="absolute z-10"
-          size={50}
-          color="#fff"
-          onPress={togglePlayPause}
+    <Pressable onPress={handleDoubleTap}>
+      <View className="items-center justify-center relative p-10">
+        {!isPlaying ? (
+          <Ionicons
+            name="pause"
+            className="absolute z-10"
+            size={50}
+            color="#fff"
+            onPress={togglePlayPause}
+          />
+        ) : (
+          <Ionicons
+            name="play"
+            className="absolute z-10"
+            size={50}
+            color="#fff"
+            onPress={togglePlayPause}
+          />
+        )}
+        <TouchableOpacity className="absolute bottom-0 right-0 z-10" onPress={handleFullScren}>
+          <Ionicons name="expand" size={30} />
+        </TouchableOpacity>
+        <Video
+          source={{
+            uri,
+          }}
+          resizeMode="cover"
+          fullscreen={fullScreen}
+          controls={fullScreen}
+          onFullscreenPlayerDidDismiss={handleFullScren}
+          paused={isPlaying}
+          ref={videoRef}
+          style={{
+            height: fullScreen ? 1000 : 300,
+            width: 300,
+            transform: [{ rotate: '2deg' }],
+          }}
+          onEnd={resetCurrentTimePause}
         />
-      ) : (
-        <Ionicons
-          name="play"
-          className="absolute z-10"
-          size={50}
-          color="#fff"
-          onPress={togglePlayPause}
-        />
-      )}
-      <TouchableOpacity className="absolute bottom-0 right-5 z-10">
-        <Ionicons name="expand" size={30} />
-      </TouchableOpacity>
-      <Video
-        source={{
-          uri,
-        }}
-        onEnd={togglePlayPause}
-        paused={isPlaying}
-        onProgress={currentime}
-        style={{
-          height: 300,
-          width: 300,
-          transform: [{ rotate: '2deg' }],
-        }}
-      />
-    </View>
+      </View>
+    </Pressable>
   )
 }

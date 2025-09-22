@@ -1,6 +1,7 @@
 import { ContentMessage } from '@/components/chat/chats/content-message'
 import { Footer } from '@/components/chat/chats/footer'
 import { HeaderChat } from '@/components/chat/chats/header'
+import { AudioPlayer } from '@/components/chat/chats/Media/Audio'
 import { SearchMessages } from '@/components/chat/chats/search-messages'
 import ThemedView from '@/components/theme/themed-view'
 import { useBackHandler } from '@/hooks/use-back-handler'
@@ -45,6 +46,8 @@ export default function Chat() {
           <HeaderChat />
 
           <ContentMessage />
+          <AudioPlayer uri="" />
+
           <Footer />
         </KeyboardAvoidingView>
       </ThemedView>
