@@ -19,7 +19,11 @@ const extensions: Record<MediaType, string> = {
   ptt: 'mp3',
   ptv: 'mp4',
 }
-export async function saveMediaToDevice(mediaUrl: string, type: MediaType) {
+
+export async function saveMediaToDevice(
+  mediaUrl: string,
+  type: MediaType,
+): Promise<string | undefined> {
   const urlExtension = extensions[type] || 'jpg'
   const safeFileName = `${type}-${Date.now()}.${urlExtension}`
 

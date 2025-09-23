@@ -14,7 +14,7 @@ export async function PromoteToParticipant({
 }: IPromoteParticipant) {
   if (!groupId || !participantId || !promote) return
 
-  const { id } = getUserId()
+  const id = getUserId()
 
   try {
     const response = await api.post('group/promote-to-group', {

@@ -11,7 +11,6 @@ export function useChatWhatsapp() {
 
   if (!findChatUser) {
     return {
-      regex: inputTextFilter ? new RegExp(`(${inputTextFilter})`, 'i') : null,
       filteredMessages: [],
       inputTextFilter,
     }
@@ -28,10 +27,7 @@ export function useChatWhatsapp() {
     return matchData && matchText
   })
 
-  const regex = new RegExp(`(${inputTextFilter})`, 'i')
-
   return {
-    regex,
     user: findChatUser,
     filteredMessages,
     inputTextFilter,

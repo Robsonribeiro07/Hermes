@@ -22,7 +22,7 @@ export default function AddMemberScreen() {
   } = useAddMemberGroup(id)
 
   return (
-    <ThemedView className="flex-1">
+    <ThemedView className="flex-1 px-4">
       <HeaderAddMember />
 
       <SearchMember onChangeText={handleChangeText} />

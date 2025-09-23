@@ -1,5 +1,5 @@
 import { ContentMessage } from '@/components/chat/chats/content-message'
-import { Footer } from '@/components/chat/chats/footer'
+import { Footer } from '@/components/chat/chats/Footer/footer'
 import { HeaderChat } from '@/components/chat/chats/header'
 import { SearchMessages } from '@/components/chat/chats/search-messages'
 import ThemedView from '@/components/theme/themed-view'
@@ -19,7 +19,7 @@ export default function Chat() {
   useBackHandler({
     customFunctions: () => {
       const FilterMessagesState = useChatWhatsappStore.getState().FilterMessages
-      if (FilterMessagesState.some((u) => u.userId === '5521979836680@s.whatsapp.net')) {
+      if (FilterMessagesState.some((u) => u.userId === '12')) {
         removeFilter('12')
         return true
       }
@@ -46,7 +46,7 @@ export default function Chat() {
 
           <ContentMessage />
 
-          <Footer />
+          <Footer userId="557582598725@s.whatsapp.net" />
         </KeyboardAvoidingView>
       </ThemedView>
     </ImageBackground>

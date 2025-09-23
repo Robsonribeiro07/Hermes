@@ -23,10 +23,9 @@ export function ContentMessage() {
           date={new Date(item.date)}
           id={item.id}
           fromMe={item.fromMe}
-          thinkingMessage={item.thinkingMessage}
           type={item.type}
-          isComplete={false}
           imgUrl={user?.user.imgUrl}
+          sending={item.sending}
         />
       )}
     />

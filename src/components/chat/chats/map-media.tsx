@@ -1,21 +1,17 @@
 import { MediaType } from '@/database/whatsapp/Media/typed-media'
+import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
 import React from 'react'
-import { Text } from 'react-native'
 import { AudioPlayer } from './Media/Audio/Audio'
-import { ImageMedia } from './Media/image'
+import { ImageMedia } from './Media/image/image'
+import { PdfPreview } from './Media/pdf/pdf'
+import { StickerAnimado } from './Media/sticker/sticker-animado'
+import { TextMedia } from './Media/text'
 import { VideoMedia } from './Media/video'
 
-type IMediaMapProps = {
-  content: string
-  isComplete: boolean
-  id?: string
-  fromMe: boolean | undefined
-  thumbnail?: string
-}
-export const mediaMap: Record<MediaType, (props: IMediaMapProps) => React.ReactNode> = {
+export const mediaMap: Record<MediaType, (props: IContentMessage) => React.ReactNode> = {
   image: (props) => <ImageMedia {...props} />,
   video: (props) => <VideoMedia uri={props.content} thumbnail={props.thumbnail} />,
-  gif: (props) => <ImageMedia {...props} />,
+  gif: (props) => <StickerAnimado uri={props.content} />,
   'thumbnail-image': (props) => <ImageMedia {...props} />,
   'thumbnail-document': (props) => <ImageMedia {...props} />,
   'thumbnail-video': (props) => <ImageMedia {...props} />,
@@ -23,13 +19,11 @@ export const mediaMap: Record<MediaType, (props: IMediaMapProps) => React.ReactN
   product: (props) => <ImageMedia {...props} />,
   audio: (props) => <AudioPlayer uri={props.content} />,
   ppic: (props) => <ImageMedia {...props} />,
-  document: (props) => <ImageMedia {...props} />,
+  document: (props) => <PdfPreview link={props.content} />,
   ptv: (props) => <ImageMedia {...props} />,
   ptt: (props) => <ImageMedia {...props} />,
-  sticker: (props) => <ImageMedia {...props} />,
-  text: ({ fromMe, content }) => (
-    <Text className={`font-poppins font-light ${fromMe ? 'text-white' : 'text-black'}`}>
-      {content}
-    </Text>
+  sticker: (props) => <StickerAnimado uri={props.content} />,
+  text: ({ fromMe, content, sending }) => (
+    <TextMedia content={content} fromMe={fromMe} sending={sending} />
   ),
 }

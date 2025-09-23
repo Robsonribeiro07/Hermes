@@ -3,13 +3,16 @@ import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type IContentMessage = {
+export type IContentMessage = {
   content: string
   type: MediaType
-  date: string
+  date: Date
   fromMe: boolean
   id: string
   thumbnail?: string
+  link?: string
+  sending: boolean
+  imgUrl?: string
 }
 
 type IUserMessage = {
@@ -22,6 +25,7 @@ export type typeDataReceived = {
   user: IUserMessage
   message: IContentMessage
 }
+
 export interface IUserChat {
   messages: IContentMessage[]
   user: IUserMessage
@@ -29,7 +33,11 @@ export interface IUserChat {
 
 interface IChatStore {
   chats: IUserChat[]
+  messageToSend: typeDataReceived[] | null
+  handleAddMessagetoSend: (data: typeDataReceived | null) => void
   addMessage: (user: IUserMessage, mesage: IContentMessage) => void
+  removeMessage: (user: IUserMessage, messagedId: string) => void
+  updateMessage: (userId: string, messageId: string, updates: Partial<IContentMessage>) => void
   updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) => void
 }
 
@@ -37,6 +45,7 @@ export const useChatStore = create<IChatStore>()(
   persist(
     (set, get) => ({
       chats: [],
+      messageToSend: null,
       addMessage: (user, message) => {
         const chats = get().chats
 
@@ -70,7 +79,49 @@ export const useChatStore = create<IChatStore>()(
               : c,
           ),
         })),
+      updateMessage: (userId: string, messageId: string, updates: Partial<IContentMessage>) =>
+        set((state) => ({
+          chats: state.chats.map((c) =>
+            c.user.id === userId
+              ? {
+                  ...c,
+                  messages: c.messages.map((m) => (m.id === messageId ? { ...m, ...updates } : m)),
+                }
+              : c,
+          ),
+        })),
+      handleAddMessagetoSend: (data) =>
+        set((state) => {
+          if (!data) return { messageToSend: state.messageToSend }
+
+          const current = state.messageToSend || []
+          const userIndex = current.findIndex((m) => m.user.id === data.user.id)
+
+          if (userIndex >= 0) {
+            const existing = current[userIndex]
+            if (existing.message.content === data.message.content) {
+              return { messageToSend: state.messageToSend }
+            }
+
+            const updated = [...current]
+            updated[userIndex] = { user: data.user, message: data.message }
+            return { messageToSend: updated }
+          }
+
+          return { messageToSend: [...current, { user: data.user, message: data.message }] }
+        }),
+      removeMessage: (user, messagId) =>
+        set((state) => ({
+          chats: state.chats.map((u) =>
+            u.user.id === user.id
+              ? {
+                  ...u,
+                  messages: u.messages.filter((m) => m.id !== messagId),
+                }
+              : u,
+          ),
+        })),
     }),
-    { name: 'chats-msvbsbss', storage: mmkvStorage },
+    { name: 'chats-msvbsbsssss', storage: mmkvStorage },
   ),
 )
