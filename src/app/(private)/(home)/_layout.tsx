@@ -5,6 +5,7 @@ import ThemedView from '@/components/theme/themed-view'
 import { useOnToEventsUpdates } from '@/hooks/socket/use-on-to-events'
 import { useNotificationListener } from '@/hooks/use-notification-listenner'
 import { useChatMessageHandler } from '@/hooks/whatsapp/chats/chat/chat-message-handlers'
+import { useQueueSendMensage } from '@/hooks/whatsapp/chats/chat/use-queue-send-mensage'
 import { useTheme } from '@/theme/theme-context'
 import { Slot, useSegments } from 'expo-router'
 
@@ -12,6 +13,7 @@ export default function RootLayoutPrivate() {
   useOnToEventsUpdates()
   useNotificationListener()
   useChatMessageHandler()
+  useQueueSendMensage()
   const segments = useSegments()
 
   const { colors } = useTheme()

@@ -9,6 +9,7 @@ import { useMediaLibraryPermission } from '@/hooks/database/use-media-library-pe
 export default function HomeScreen() {
   const token = useRegisterForPushNotification()
   useMediaLibraryPermission()
+
   return (
     <ThemedView className="flex-1">
       <ThemedText text="Home" style={[{ fontWeight: '800', fontSize: 20 }]} />

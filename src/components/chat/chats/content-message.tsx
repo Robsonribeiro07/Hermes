@@ -3,7 +3,7 @@ import { FlatList } from 'react-native'
 import { MessageChat } from './message'
 
 export function ContentMessage() {
-  const { filteredMessages, user } = useChatWhatsapp()
+  const { filteredMessages, user } = useChatWhatsapp('557582598725@s.whatsapp.net')
 
   if (!filteredMessages) return null
 

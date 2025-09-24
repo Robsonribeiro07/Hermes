@@ -1,19 +1,23 @@
 import { ContentMessage } from '@/components/chat/chats/content-message'
 import { Footer } from '@/components/chat/chats/Footer/footer'
 import { HeaderChat } from '@/components/chat/chats/header'
+import { ContentAttachmmentSticker } from '@/components/chat/chats/Media/sticker/Attachment-sticker/content'
 import { SearchMessages } from '@/components/chat/chats/search-messages'
 import ThemedView from '@/components/theme/themed-view'
 import { useBackHandler } from '@/hooks/use-back-handler'
+import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
 import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { useEffect } from 'react'
 import { ImageBackground, KeyboardAvoidingView, Platform } from 'react-native'
 
 export default function Chat() {
   const { FilterMessages, removeFilter, setFilterMessages } = useChatWhatsappStore()
+  const { setUserIdTemp } = useChatStore()
   const showSearch = FilterMessages.some((u) => u.userId === '12')
 
   useEffect(() => {
     setFilterMessages('12')
+    setUserIdTemp('557582598725@s.whatsapp.net')
   }, [])
 
   useBackHandler({
@@ -47,6 +51,7 @@ export default function Chat() {
           <ContentMessage />
 
           <Footer userId="557582598725@s.whatsapp.net" />
+          <ContentAttachmmentSticker />
         </KeyboardAvoidingView>
       </ThemedView>
     </ImageBackground>

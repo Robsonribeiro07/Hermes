@@ -6,7 +6,6 @@ interface IContactStore {
   setClose: () => void
   openLoading: boolean
   setOpenLoading: () => void
-
   setCloseLoading: () => void
   isUploading: 'uploading' | 'finishing' | null
   setIsUploading: () => void

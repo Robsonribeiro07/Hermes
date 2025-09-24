@@ -1,31 +1,36 @@
 import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
 import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
+import { useMessageQueue } from '@/store/whatsapp/chats/message-queue'
+import { useMemo } from 'react'
 
-export function useChatWhatsapp() {
+export function useChatWhatsapp(userId: string) {
   const { FilterMessages, inputTextFilter } = useChatWhatsappStore()
+  const { queue } = useMessageQueue()
   const { chats } = useChatStore()
 
-  const userFilter = FilterMessages.find((u) => u.userId === '12')
+  const findChatUser = chats.find((u) => u.user.id === userId)
 
-  const findChatUser = chats.find((u) => u.user.id === '557582598725@s.whatsapp.net')
+  const messagesToRender = useMemo(
+    () => [
+      ...queue.filter((q) => q.user.id === userId).map((q) => q.messages),
+      ...(findChatUser?.messages || []),
+    ],
+    [findChatUser, queue, userId],
+  )
 
-  if (!findChatUser) {
-    return {
-      filteredMessages: [],
-      inputTextFilter,
-    }
-  }
-  const filteredMessages = findChatUser.messages.filter((m) => {
-    const matchData = userFilter?.date.toString()
-      ? m.date.toString() === userFilter.date.toString()
-      : true
+  const filteredMessages = useMemo(() => {
+    if (!messagesToRender) return []
 
-    const matchText = inputTextFilter
-      ? m.content.toLowerCase().includes(inputTextFilter.toLowerCase())
-      : true
+    const userFilter = FilterMessages.find((u) => u.userId === userId)
 
-    return matchData && matchText
-  })
+    return messagesToRender.filter((m) => {
+      const matchData = userFilter?.date ? m.date.toString() === userFilter.date.toString() : true
+      const matchText = inputTextFilter
+        ? m.content.toLowerCase().includes(inputTextFilter.toLowerCase())
+        : true
+      return matchData && matchText
+    })
+  }, [messagesToRender, FilterMessages, inputTextFilter, userId])
 
   return {
     user: findChatUser,

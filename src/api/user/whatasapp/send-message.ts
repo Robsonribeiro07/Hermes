@@ -5,6 +5,7 @@ interface ISendMessage {
   userId: string
   destination: string
   message: string
+  messageId?: string
 }
 
 export async function sendMessage({ userId, destination, message }: ISendMessage) {

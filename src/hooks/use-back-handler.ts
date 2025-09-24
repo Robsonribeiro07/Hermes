@@ -1,16 +1,18 @@
 import { useEffect } from 'react'
 import { BackHandler } from 'react-native'
 
-interface IuseBackHandler {
-  customFunctions: () => boolean | void
+interface IUseBackHandler {
+  customFunctions: () => boolean
 }
 
-export function useBackHandler({ customFunctions }: IuseBackHandler) {
+export function useBackHandler({ customFunctions }: IUseBackHandler) {
   useEffect(() => {
-    const onBackpress = () => {
-      return customFunctions() || false
+    const onBackPress = () => {
+      return customFunctions()
     }
 
-    BackHandler.addEventListener('hardwareBackPress', onBackpress)
-  }, [])
+    const subscription = BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+    return () => subscription.remove()
+  }, [customFunctions])
 }

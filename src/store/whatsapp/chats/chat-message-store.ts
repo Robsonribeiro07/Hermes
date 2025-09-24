@@ -15,7 +15,7 @@ export type IContentMessage = {
   imgUrl?: string
 }
 
-type IUserMessage = {
+export type IUserMessage = {
   name: string
   imgUrl: string
   id: string
@@ -34,11 +34,19 @@ export interface IUserChat {
 interface IChatStore {
   chats: IUserChat[]
   messageToSend: typeDataReceived[] | null
+  onInputFocus: boolean
+  userIdtemp: string | null
+  messageIdtemp: string | null
+  setUserIdTemp: (value: string | null) => void
+  addEmojiToTempMessage: (emoji: string) => void
+  setMessageIdTemp: (value: string | null) => void
+  setOnInputFocus: (value: boolean) => void
   handleAddMessagetoSend: (data: typeDataReceived | null) => void
-  addMessage: (user: IUserMessage, mesage: IContentMessage) => void
-  removeMessage: (user: IUserMessage, messagedId: string) => void
+  addMessage: (user: IUserMessage, message: IContentMessage) => void
+  removeMessage: (user: IUserMessage, messageId: string) => void
   updateMessage: (userId: string, messageId: string, updates: Partial<IContentMessage>) => void
   updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) => void
+  removeMessageToSend: (messageId: string) => void
 }
 
 export const useChatStore = create<IChatStore>()(
@@ -46,6 +54,9 @@ export const useChatStore = create<IChatStore>()(
     (set, get) => ({
       chats: [],
       messageToSend: null,
+      onInputFocus: false,
+      userIdtemp: null,
+      messageIdtemp: null,
       addMessage: (user, message) => {
         const chats = get().chats
 
@@ -121,7 +132,41 @@ export const useChatStore = create<IChatStore>()(
               : u,
           ),
         })),
+      setOnInputFocus: (value: boolean) => set({ onInputFocus: value }),
+      setMessageIdTemp: (value: string | null) => set({ messageIdtemp: value }),
+      setUserIdTemp: (value: string | null) => set({ userIdtemp: value }),
+
+      addEmojiToTempMessage: (emoji: string) =>
+        set((state) => {
+          const userId = state.userIdtemp
+          const messageId = state.messageIdtemp
+
+          if (!state.messageToSend || !userId || !messageId)
+            return { messageToSend: state.messageToSend }
+
+          const updated = state.messageToSend.map((m) => {
+            if (m.user.id === userId && m.message.id === messageId) {
+              return {
+                ...m,
+                message: {
+                  ...m.message,
+                  content: m.message.content + emoji, // concatena o emoji
+                },
+              }
+            }
+            return m
+          })
+
+          return { messageToSend: updated }
+        }),
+      removeMessageToSend: (messageId: string) =>
+        set((state) => ({
+          messageToSend: state.messageToSend
+            ? state.messageToSend.filter((m) => m.message.id !== messageId)
+            : null,
+        })),
     }),
-    { name: 'chats-msvbsbsssss', storage: mmkvStorage },
+
+    { name: 'csss', storage: mmkvStorage },
   ),
 )
