@@ -1,7 +1,14 @@
 import axios from 'axios'
+import Constants from 'expo-constants'
+
+const API_URL = Constants.expoConfig?.extra?.apirUrl
+
+if (!API_URL) {
+  throw new Error('❌ API_URL não definido! Verifique o app.config.js e as variáveis de ambiente.')
+}
 
 const api = axios.create({
-  baseURL: 'http://10.0.0.109:3000/api/',
+  baseURL: `${API_URL}/api`,
 })
 
 export default api

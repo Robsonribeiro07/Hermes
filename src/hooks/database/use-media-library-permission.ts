@@ -4,20 +4,25 @@ import { useEffect, useState } from 'react'
 export function useMediaLibraryPermission() {
   const [granted, setGranted] = useState<boolean | null>(null)
 
-  const requestPermission = async () => {
-    const permisson = await MediaLibrary.requestPermissionsAsync()
-
-    setGranted(permisson.granted)
-
-    return permisson.granted
-  }
-
   useEffect(() => {
-    MediaLibrary.getPermissionsAsync().then((p) => setGranted(p.granted))
-  })
+    const checkAndReqeust = async () => {
+      const { granted: hasPermission } = await MediaLibrary.getPermissionsAsync()
+
+      if (!hasPermission) {
+        const { granted: requested } = await MediaLibrary.requestPermissionsAsync()
+
+        setGranted(requested)
+
+        return
+      }
+
+      setGranted(true)
+    }
+
+    checkAndReqeust()
+  }, [])
 
   return {
     granted,
-    requestPermission,
   }
 }

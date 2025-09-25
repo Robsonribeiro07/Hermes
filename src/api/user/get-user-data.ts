@@ -1,11 +1,11 @@
-import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
+import { getUserId } from '@/database/MMKV/get-user-id'
 import api from '@/lib/axios'
-import { userStore } from '@/store/QRcode/user-store'
 
 export interface IGroupParticipant {
   id: string
   isAdmin: boolean
   isSuperAdmin: boolean
+  imgUrl: string | undefined
 }
 
 export interface IGroup {
@@ -36,10 +36,7 @@ interface IUserWhatsappDataResponse {
 }
 
 export async function getUserData(): Promise<IuserWhatsappData | null> {
-  const userLocaleStorage = await getUserLocaledata()
-
-  const state = userStore.getState()
-  const userId = userLocaleStorage?.id ?? state.userId
+  const userId = getUserId()
 
   if (!userId) return null
 

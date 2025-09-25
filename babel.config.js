@@ -7,11 +7,11 @@ module.exports = function (api) {
         'babel-preset-expo',
         {
           jsxImportSource: 'nativewind',
+          reanimated: false, // 🚫 desativa o plugin antigo injetado automaticamente
         },
       ],
       'nativewind/babel',
     ],
-
     plugins: [
       [
         'module-resolver',
@@ -23,8 +23,8 @@ module.exports = function (api) {
           },
         },
       ],
-      'react-native-reanimated/plugin',
-      // O plugin react-native-dotenv foi removido
+      // ⚡ importante: sempre no final
+      'react-native-worklets/plugin',
     ],
   }
 }

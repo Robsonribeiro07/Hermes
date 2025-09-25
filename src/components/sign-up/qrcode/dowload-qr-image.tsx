@@ -5,7 +5,7 @@ import * as FileSystem from 'expo-file-system'
 import * as MediaLibrary from 'expo-media-library'
 const DowloadQrImage = ({ color }: { color: string }) => {
   const { QRcode, base64 } = QRCodeStore()
-  const { granted, requestPermission } = useMediaLibraryPermission()
+  const { granted } = useMediaLibraryPermission()
 
   const SaveQRcodeImage = async () => {
     if (!QRcode || !base64) return
@@ -18,10 +18,6 @@ const DowloadQrImage = ({ color }: { color: string }) => {
       })
 
       let permissionGranted = granted
-
-      if (!granted) {
-        permissionGranted = await requestPermission()
-      }
 
       if (permissionGranted) {
         await MediaLibrary.createAssetAsync(filename)

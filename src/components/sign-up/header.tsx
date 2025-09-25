@@ -1,4 +1,3 @@
-import { useTheme } from '@/theme/theme-context'
 import { useRouter } from 'expo-router'
 import LottieView from 'lottie-react-native'
 import { useWindowDimensions } from 'react-native'
@@ -6,8 +5,6 @@ import { ThemedText } from '../theme/themed-text'
 import ThemedView from '../theme/themed-view'
 
 function Header() {
-  const { colors } = useTheme()
-
   const { push } = useRouter()
 
   const { width } = useWindowDimensions()
@@ -20,8 +17,7 @@ function Header() {
         style={{ width: width * 0.8, height: width * 0.8 }}
       />
 
-      <ThemedText text="Loop" size={30} weight={'bold'} />
-      <ThemedText text="Welcome Back! please log in" fontFamily="Poppins" />
+      <ThemedText text="Hermes" size={30} weight={'bold'} />
     </ThemedView>
   )
 }

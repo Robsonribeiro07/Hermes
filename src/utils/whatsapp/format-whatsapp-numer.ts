@@ -1,4 +1,5 @@
-export function formatWhatasppNumber(id: string) {
+export function formatWhatasppNumber(id: string | undefined) {
+  if (!id) return undefined
   let number = id.split('@')[0].split(':')[0]
 
   const ddd = number.slice(0, 2)

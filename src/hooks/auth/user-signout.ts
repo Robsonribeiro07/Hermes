@@ -1,14 +1,11 @@
 import { IsignOut, IsignOutResponse, SignUpAPi } from '@/api/user/sign-up'
-import { getUserLocaledata } from '@/database/asyncStorage/get-user-locale-data'
+import { getUserId } from '@/database/MMKV/get-user-id'
 import { userStore } from '@/store/QRcode/user-store'
 import { setQRcodeStore } from '@/utils/bot/set-qr-code'
 import { useMutation } from '@tanstack/react-query'
 import { useRouter } from 'expo-router'
-import uuid from 'react-native-uuid'
-import { useSocket } from '../socket/useSocket'
 
 export function useSignUp() {
-  const { connectSocket } = useSocket()
   const { replace } = useRouter()
   const { setId } = userStore()
 
@@ -17,8 +14,6 @@ export function useSignUp() {
     onSuccess: (data) => {
       const { QRcode, base64, user, message, statusBot } = data
 
-      console.log(user)
-      console.log(message, statusBot)
       if (message === 'bot-connectado' && statusBot === true) {
         console.log('Voce ja tem conta, so sera redicionado, e seu bot esta conectado')
         replace('/(private)/(home)/home')
@@ -40,15 +35,10 @@ export function useSignUp() {
   })
 
   const handleSubmitFn = async () => {
-    const localData = await getUserLocaledata()
+    const id = getUserId()
 
-    const id = uuid.v4()
-
-    const data = localData?.id ?? id
-
-    await connectSocket(data)
-
-    mutate({ id: data })
+    if (!id) return
+    mutate({ id: id! })
   }
 
   return {

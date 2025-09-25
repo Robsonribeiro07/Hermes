@@ -1,14 +1,9 @@
-import { useFocusEffect, useRouter } from 'expo-router'
-import { useCallback } from 'react'
+import { useMiddleware } from '@/hooks/auth/middleware'
+import { router } from 'expo-router'
 
-export default function Middleware() {
-  const { push } = useRouter()
-
-  useFocusEffect(
-    useCallback(() => {
-      push('/(public)/sign-up')
-    }, [push]),
-  )
+export default function App() {
+  if (!router) return
+  useMiddleware()
 
   return null
 }

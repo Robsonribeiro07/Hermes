@@ -19,7 +19,7 @@ const NavColors = {
   dark: {
     checked: {
       true: '#4EA8DE',
-      false: '#212121',
+      false: '#ffff',
     },
   },
   light: {
@@ -38,7 +38,7 @@ const NavItems = ({ Name, href, onLongPress }: INavItems) => {
   const checked = usePathname() === `/${href}`
 
   const colorChecked = NavColors[mode].checked[checked ? 'true' : 'false']
-  const colorIconsChecked = checked ? colors.blueText : colors.text
+  const colorIconsChecked = checked ? colors.blueText : colors.primary
 
   const router = useRouter()
 

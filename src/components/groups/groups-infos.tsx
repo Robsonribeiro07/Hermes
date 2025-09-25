@@ -1,5 +1,5 @@
 import { useTheme } from '@/theme/theme-context'
-import { View } from 'react-native'
+import { TouchableOpacity, View } from 'react-native'
 import { ThemedText } from '../theme/themed-text'
 import ThemedView from '../theme/themed-view'
 import { AvatarProfile } from '../user/avatar-profile'
@@ -9,25 +9,33 @@ interface IgroupsInfos {
   name: string
   members: string
   ImgUrl: string
+  onPress: () => void
 }
-const GroupsInfos = ({ name, members, ImgUrl }: IgroupsInfos) => {
+const GroupsInfos = ({ name, members, ImgUrl, onPress }: IgroupsInfos) => {
   const { colors } = useTheme()
   return (
-    <ThemedView
-      className="w-full h-32 rounded-2xl flex-row items-center px-3 my-3  "
-      lightColor={colors.blueText}
-    >
-      <AvatarProfile withBorder ImgUrl={ImgUrl} />
+    <TouchableOpacity activeOpacity={0.7} onPress={onPress}>
+      <ThemedView
+        className="w-full h-24 rounded-2xl flex-row items-center px-3 my-3  "
+        lightColor={colors.secondary}
+      >
+        <AvatarProfile withBorder ImgUrl={ImgUrl} />
 
-      <View className="flex-row justify-between flex-1 px-3">
-        <View>
-          <ThemedText text={name} lightColor={colors.foreground} size={14} />
-          <ThemedText text={members} className="opacity-70" lightColor={colors.primary} size={12} />
+        <View className="flex-row justify-between flex-1 px-3">
+          <View>
+            <ThemedText text={name} lightColor={colors.foreground} size={14} />
+            <ThemedText
+              text={`Membros ${members}`}
+              className="opacity-70"
+              lightColor={colors.foreground}
+              size={12}
+            />
+          </View>
+
+          <MoreOptionsGroup />
         </View>
-
-        <MoreOptionsGroup />
-      </View>
-    </ThemedView>
+      </ThemedView>
+    </TouchableOpacity>
   )
 }
 

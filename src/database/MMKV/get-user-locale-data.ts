@@ -1,9 +1,9 @@
 import { IuserWhatsappData } from '@/api/user/get-user-data'
-import AsyncStorage from '@react-native-async-storage/async-storage'
+import { storageID } from '.'
 
 export async function getUserLocaledata() {
   try {
-    const raw = await AsyncStorage.getItem('userData')
+    const raw = storageID.getString('userData')
     return raw ? (JSON.parse(raw) as IuserWhatsappData) : null
   } catch (err) {
     return null

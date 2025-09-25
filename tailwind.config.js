@@ -167,6 +167,8 @@ module.exports = {
           info: 'rgb(var(--color-background-info)/<alpha-value>)',
           light: '#FBFBFB',
           dark: '#181719',
+          green: '#4CAF7F',
+          greenPeding: '#6FCF9F',
         },
         indicator: {
           primary: 'rgb(var(--color-indicator-primary)/<alpha-value>)',
@@ -178,6 +180,7 @@ module.exports = {
         heading: undefined,
         body: undefined,
         mono: undefined,
+        poppins: 'Poppins',
         jakarta: ['var(--font-plus-jakarta-sans)'],
         roboto: ['var(--font-roboto)'],
         code: ['var(--font-source-code-pro)'],
@@ -203,4 +206,4 @@ module.exports = {
       },
     },
   },
-};
+}

@@ -16,6 +16,8 @@
     "src/**/*.tsx",
     ".expo/types/**/*.ts",
     "expo-env.d.ts",
-    "nativewind-env.d.ts"
+    "nativewind-env.d.ts",
+    "src/components/chat/chats/Media/Audio/slider.txs",
+    "src/components/chat/chats/Media/timer.tss"
   ]
 }
