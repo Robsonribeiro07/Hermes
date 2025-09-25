@@ -8,7 +8,7 @@ import { useMediaLibraryPermission } from '@/hooks/database/use-media-library-pe
 import { useGetRandomGifs } from '@/hooks/whatsapp/chats/chat/gifs/use-get-random-gifs'
 
 export default function HomeScreen() {
-  const token = useRegisterForPushNotification()
+  useRegisterForPushNotification()
   useMediaLibraryPermission()
   useGetRandomGifs()
   return (

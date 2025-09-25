@@ -7,7 +7,6 @@ interface ITextWithFont {
 }
 
 const TextWithFont = ({ text, size = 'text-base', color = 'text-black' }: ITextWithFont) => {
-  console.log(color)
   return <Text className={`font-inter ${size} ${color}`}>{text}</Text>
 }
 

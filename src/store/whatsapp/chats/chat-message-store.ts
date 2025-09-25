@@ -62,24 +62,23 @@ export const useChatStore = create<IChatStore>()(
 
       messageIdtemp: null,
       addMessage: (user, message) => {
-        const chats = get().chats
+        set((state) => {
+          const chats = [...state.chats]
+          const userChat = chats.find((c) => c.user.id === user.id)
 
-        const userChat = chats.find((c) => c.user.id === user.id)
-
-        if (userChat) {
-          if (!userChat.messages.includes(message)) {
-            if (userChat.messages.some((m) => m.id === message.id)) {
-              console.error('mensagem ja existe no chat')
-              return
+          if (userChat) {
+            const exists = userChat.messages.some((m) => m.id === message.id)
+            if (exists) {
+              console.error('mensagem já existe no chat')
+              return { chats } // retorna o estado sem alterações
             }
-            userChat.messages.unshift(message)
+
+            userChat.messages = [message, ...userChat.messages]
+            return { chats }
+          } else {
+            return { chats: [...chats, { user, messages: [message] }] }
           }
-          set({ chats: [...chats] })
-        } else {
-          set({
-            chats: [...chats, { user, messages: [message] }],
-          })
-        }
+        })
       },
       updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) =>
         set((state) => ({
@@ -171,6 +170,6 @@ export const useChatStore = create<IChatStore>()(
         })),
     }),
 
-    { name: 'chat-2b', storage: mmkvStorage },
+    { name: 'chat-2bbb', storage: mmkvStorage },
   ),
 )

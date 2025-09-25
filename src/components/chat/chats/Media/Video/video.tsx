@@ -1,4 +1,3 @@
-import { Skeleton } from '@/components/ui/skeleton'
 import { Ionicons } from '@expo/vector-icons'
 import { View } from 'moti'
 import React, { useRef, useState } from 'react'
@@ -11,15 +10,7 @@ interface IVideoMedia {
   isVisible?: boolean
 }
 
-export const VideoMedia = React.memo(({ uri, thumbnail, isVisible }: IVideoMedia) => {
-  if (!isVisible) {
-    return <Skeleton className="w-[200px] h-[200px] bg-secondary-500" />
-  }
-
-  if (thumbnail) {
-    return <Image source={{ uri: thumbnail }} width={300} height={300} />
-  }
-
+export const VideoMedia = React.memo(({ uri, thumbnail }: IVideoMedia) => {
   const [isPlaying, setIsPlaying] = useState(true)
   const [fullScreen, setFullScreen] = useState(false)
   const [lastTap, setLastTap] = useState<number | null>(null)
@@ -44,9 +35,6 @@ export const VideoMedia = React.memo(({ uri, thumbnail, isVisible }: IVideoMedia
     }
   }
   const handleFullScren = () => setFullScreen((f) => !f)
-  if (!isVisible) {
-    return <Skeleton className="w-[200px] h-[200px] bg-secondary-500" />
-  }
 
   return thumbnail ? (
     <Image source={{ uri }} width={300} height={300} />

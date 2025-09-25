@@ -1,4 +1,5 @@
 import { Input, InputField } from '@/components/ui/input'
+import { useTypingStatus } from '@/hooks/whatsapp/chats/chat/use-typing-status'
 import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
 import { useEmojiStore } from '@/store/whatsapp/chats/emojis/use-emoji-store'
 import { Ionicons } from '@expo/vector-icons'
@@ -10,8 +11,8 @@ interface IInputMessage {
   userId?: string
 }
 export function InputMessage({ userId }: IInputMessage) {
-  const { handleAddMessagetoSend, messageToSend, setOnInputFocus, setMessageIdTemp } =
-    useChatStore()
+  const { handleAddMessagetoSend, messageToSend, setOnInputFocus, setMessageIdTemp } = useChatStore()
+  const { startTyping, stopTyping } = useTypingStatus()
   const inputRef = useRef<TextInput>(null)
   const { typeKeyboard } = useEmojiStore()
   const getValue = messageToSend?.find((m) => m.user.id === userId)
@@ -52,9 +53,18 @@ export function InputMessage({ userId }: IInputMessage) {
         placeholder="Type a message"
         value={getValue?.message.content || ''}
         className="placeholder:font-poppins "
-        onBlur={() => setOnInputFocus(false)}
-        onFocus={() => setOnInputFocus(true)}
-        onChangeText={(text) => handleAddNewMessageFn(text)}
+        onBlur={() => {
+          stopTyping()
+          setOnInputFocus(false)
+        }}
+        onFocus={() => {
+          startTyping()
+          setOnInputFocus(true)
+        }}
+        onChangeText={(text) => {
+          startTyping()
+          handleAddNewMessageFn(text)
+        }}
       />
 
       <TouchableOpacity activeOpacity={0.5}>

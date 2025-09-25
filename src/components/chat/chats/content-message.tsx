@@ -1,20 +1,19 @@
-import { useLazyLoading } from '@/hooks/whatsapp/chats/chat/use-lazzy-loading'
+import { useChatWhatsapp } from '@/hooks/whatsapp/chats/chat/use-chat-whatsapp'
 import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
-import { useCallback } from 'react'
+import { useCallback, useEffect } from 'react'
 import { FlatList } from 'react-native'
 import { MessageChat } from './message'
 
 export function ContentMessage() {
-  const { filteredMessages, viewedItems, onViewableItemsChanged, viewabilityConfig } =
-    useLazyLoading()
-  const renderItem = useCallback(
-    ({ item }: { item: IContentMessage }) => {
-      const isVisible = viewedItems.includes(item.id.toString())
-      return <MessageChat {...item} isVisible={isVisible} />
-    },
-    [viewedItems],
-  )
+  const { filteredMessages } = useChatWhatsapp()
 
+  const renderItem = useCallback(({ item }: { item: IContentMessage }) => {
+    return <MessageChat {...item} key={item.id} />
+  }, [])
+
+  useEffect(() => {
+    console.log(filteredMessages.length, 'mudou')
+  }, [filteredMessages])
   if (!filteredMessages) return null
 
   return (
@@ -25,11 +24,15 @@ export function ContentMessage() {
       keyExtractor={(item) => item.id.toString()}
       initialNumToRender={10}
       windowSize={10}
-      removeClippedSubviews
+      maxToRenderPerBatch={10}
       renderItem={renderItem}
-      onViewableItemsChanged={onViewableItemsChanged}
-      viewabilityConfig={viewabilityConfig}
       showsVerticalScrollIndicator={false}
+      scrollEnabled
+      scrollEventThrottle={16}
+      updateCellsBatchingPeriod={50}
+      decelerationRate="normal"
+      bouncesZoom={false}
+      bounces
     />
   )
 }

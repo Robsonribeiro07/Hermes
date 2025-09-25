@@ -5,26 +5,29 @@ interface ITextMedia {
   content: string
   sending: boolean
 }
+
 export function TextMedia({ fromMe, content, sending }: ITextMedia) {
-  console.log(sending)
-
-  const bgSendingMessage = sending ? 'bg-secondary-800' : 'bg-background-green'
-
-  if (sending)
+  if (sending) {
     return (
-      <View className={bgSendingMessage}>
+      <View className="bg-secondary-800 min-h-[60px]">
         <Text
-          className={`font-poppins p-3 flex-1 font-light   ${fromMe ? 'text-white' : 'text-black'}`}
+          className={`font-poppins p-3 font-light ${fromMe ? 'text-white' : 'text-black'}`}
+          numberOfLines={0}
         >
           {content}
         </Text>
 
-        <ActivityIndicator className="items-end" />
+        <View className="px-3 pb-2 items-end">
+          <ActivityIndicator size="small" color={fromMe ? '#ffffff' : '#666666'} />
+        </View>
       </View>
     )
+  }
+
   return (
     <Text
-      className={`font-poppins p-3 flex-1 font-light   ${fromMe ? 'text-white' : 'text-black'}`}
+      className={`font-poppins p-3 font-light ${fromMe ? 'text-white' : 'text-black'}`}
+      numberOfLines={0}
     >
       {content}
     </Text>

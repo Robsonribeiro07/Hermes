@@ -1,6 +1,7 @@
 import { ContentMessage } from '@/components/chat/chats/content-message'
 import { Footer } from '@/components/chat/chats/Footer/footer'
 import { HeaderChat } from '@/components/chat/chats/header'
+import { ReactionOverlay } from '@/components/chat/chats/message-reactions/reaction-overlay'
 import { SearchMessages } from '@/components/chat/chats/search-messages'
 import { ContentAttachmmentSticker } from '@/components/chat/chats/sticker/Attachment-sticker/content'
 import ThemedView from '@/components/theme/themed-view'
@@ -11,7 +12,7 @@ import { useEffect } from 'react'
 import { ImageBackground, KeyboardAvoidingView, Platform, useWindowDimensions } from 'react-native'
 
 export default function Chat() {
-  const { FilterMessages, removeFilter, setFilterMessages } = useChatWhatsappStore()
+  const { FilterMessages, removeFilter } = useChatWhatsappStore()
   const { setUserIdTemp } = useChatStore()
   const { height } = useWindowDimensions()
 
@@ -34,10 +35,7 @@ export default function Chat() {
   })
 
   return (
-    <ImageBackground
-      className="flex-1"
-      source={require('../../../../assets/images/background-chat.jpeg')}
-    >
+    <ImageBackground className="flex-1" source={require('../../../../assets/images/background-chat.jpeg')}>
       <ThemedView className="flex-1 ">
         {showSearch && <SearchMessages />}
 
@@ -53,6 +51,7 @@ export default function Chat() {
 
           <Footer userId="557582598725@s.whatsapp.net" />
           <ContentAttachmmentSticker />
+          <ReactionOverlay />
         </KeyboardAvoidingView>
       </ThemedView>
     </ImageBackground>

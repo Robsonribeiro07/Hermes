@@ -9,6 +9,7 @@ export function useChatMessageHandler() {
 
   useEffect(() => {
     socket.on('new-message-user-received', async ({ user, message }: typeDataReceived) => {
+      if (!message.content) return
       if (message.type !== 'text') {
         addMessage(user, {
           ...message,
