@@ -1,9 +1,19 @@
-import { useChatWhatsapp } from '@/hooks/whatsapp/chats/chat/use-chat-whatsapp'
+import { useLazyLoading } from '@/hooks/whatsapp/chats/chat/use-lazzy-loading'
+import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
+import { useCallback } from 'react'
 import { FlatList } from 'react-native'
 import { MessageChat } from './message'
 
 export function ContentMessage() {
-  const { filteredMessages, user } = useChatWhatsapp('557582598725@s.whatsapp.net')
+  const { filteredMessages, viewedItems, onViewableItemsChanged, viewabilityConfig } =
+    useLazyLoading()
+  const renderItem = useCallback(
+    ({ item }: { item: IContentMessage }) => {
+      const isVisible = viewedItems.includes(item.id.toString())
+      return <MessageChat {...item} isVisible={isVisible} />
+    },
+    [viewedItems],
+  )
 
   if (!filteredMessages) return null
 
@@ -13,21 +23,13 @@ export function ContentMessage() {
       inverted
       data={filteredMessages}
       keyExtractor={(item) => item.id.toString()}
-      initialNumToRender={5}
-      windowSize={5}
-      maxToRenderPerBatch={10}
+      initialNumToRender={10}
+      windowSize={10}
+      removeClippedSubviews
+      renderItem={renderItem}
+      onViewableItemsChanged={onViewableItemsChanged}
+      viewabilityConfig={viewabilityConfig}
       showsVerticalScrollIndicator={false}
-      renderItem={({ item }) => (
-        <MessageChat
-          content={item.content}
-          date={new Date(item.date)}
-          id={item.id}
-          fromMe={item.fromMe}
-          type={item.type}
-          imgUrl={user?.user.imgUrl}
-          sending={item.sending}
-        />
-      )}
     />
   )
 }

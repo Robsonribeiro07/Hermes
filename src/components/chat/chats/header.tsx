@@ -20,7 +20,7 @@ export function HeaderChat() {
       <View className="flex-row flex-1 px-5 items-center gap-3 ">
         <AvatarProfile size="lg" ImgUrl={user?.user.imgUrl} />
         <View>
-          <Text className="font-poppins text-xl">Samy</Text>
+          <Text className="font-poppins text-xl">Hermes</Text>
           <Text className="font-poppins text-sm text-primary-300">online</Text>
         </View>
       </View>

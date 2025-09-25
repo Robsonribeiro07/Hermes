@@ -13,7 +13,11 @@ function MessageChatComponent({
   type = 'text',
   imgUrl,
   sending,
+  mimyType,
+  gifPlayback,
+  isVisible,
 }: IContentMessage) {
+  console.log('Render MessageChat:', id, isVisible)
   const newDate = useMemo(() => new Date(date), [date])
 
   const ComponentRenderMedia = useMemo(() => mediaMap[type], [type])
@@ -21,15 +25,8 @@ function MessageChatComponent({
   return (
     <Box className="w-full my-2 min-h-[100px]" id={id}>
       <Box
-        style={{
-          elevation: 5,
-          shadowColor: '#000',
-          shadowOffset: { width: 0, height: 2 },
-          shadowOpacity: 0.3,
-          shadowRadius: 3,
-        }}
-        className={`w-auto min-w-40 max-w-[80%] h-auto min-h-[20px] rounded-lg  ${
-          fromMe ? 'bg-secondary-900 ml-auto' : 'bg-gray-200 mr-auto ml-10'
+        className={`w-auto min-w-40 max-w-[80%]  h-auto min-h-[20px] rounded-lg overflow-hidden ${
+          fromMe ? 'ml-auto bg-green-400' : 'bg-gray-200 mr-auto ml-10'
         }`}
       >
         <ComponentRenderMedia
@@ -41,6 +38,9 @@ function MessageChatComponent({
           imgUrl={imgUrl}
           type={type}
           date={date}
+          mimyType={mimyType}
+          gifPlayback={gifPlayback}
+          isVisible={isVisible}
         />
       </Box>
 
@@ -57,9 +57,10 @@ function MessageChatComponent({
 export const MessageChat = React.memo(MessageChatComponent, (prev, next) => {
   return (
     prev.content === next.content &&
-    prev.date.getTime() === next.date.getTime() &&
     prev.fromMe === next.fromMe &&
     prev.type === next.type &&
-    prev.imgUrl === next.imgUrl
+    prev.imgUrl === next.imgUrl &&
+    prev.sending === next.sending &&
+    prev.isVisible === next.isVisible
   )
 })

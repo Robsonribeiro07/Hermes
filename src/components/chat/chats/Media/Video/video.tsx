@@ -1,15 +1,25 @@
+import { Skeleton } from '@/components/ui/skeleton'
 import { Ionicons } from '@expo/vector-icons'
 import { View } from 'moti'
-import { useRef, useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { Image, Pressable, TouchableOpacity } from 'react-native'
 import Video from 'react-native-video'
 
 interface IVideoMedia {
   uri: string
   thumbnail?: string
+  isVisible?: boolean
 }
 
-export function VideoMedia({ uri, thumbnail }: IVideoMedia) {
+export const VideoMedia = React.memo(({ uri, thumbnail, isVisible }: IVideoMedia) => {
+  if (!isVisible) {
+    return <Skeleton className="w-[200px] h-[200px] bg-secondary-500" />
+  }
+
+  if (thumbnail) {
+    return <Image source={{ uri: thumbnail }} width={300} height={300} />
+  }
+
   const [isPlaying, setIsPlaying] = useState(true)
   const [fullScreen, setFullScreen] = useState(false)
   const [lastTap, setLastTap] = useState<number | null>(null)
@@ -34,11 +44,15 @@ export function VideoMedia({ uri, thumbnail }: IVideoMedia) {
     }
   }
   const handleFullScren = () => setFullScreen((f) => !f)
+  if (!isVisible) {
+    return <Skeleton className="w-[200px] h-[200px] bg-secondary-500" />
+  }
+
   return thumbnail ? (
     <Image source={{ uri }} width={300} height={300} />
   ) : (
     <Pressable onPress={handleDoubleTap}>
-      <View className="items-center justify-center relative p-10">
+      <View className="items-center justify-center relative p-1 overflow-hidden">
         {!isPlaying ? (
           <Ionicons
             name="pause"
@@ -63,6 +77,7 @@ export function VideoMedia({ uri, thumbnail }: IVideoMedia) {
           source={{
             uri,
           }}
+          repeat={true}
           resizeMode="cover"
           fullscreen={fullScreen}
           controls={fullScreen}
@@ -70,13 +85,12 @@ export function VideoMedia({ uri, thumbnail }: IVideoMedia) {
           paused={isPlaying}
           ref={videoRef}
           style={{
-            height: fullScreen ? 1000 : 300,
+            height: fullScreen ? 1000 : 200,
             width: 300,
-            transform: [{ rotate: '2deg' }],
           }}
           onEnd={resetCurrentTimePause}
         />
       </View>
     </Pressable>
   )
-}
+})

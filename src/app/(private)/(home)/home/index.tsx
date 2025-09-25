@@ -5,11 +5,12 @@ import { ThemedText } from '@/components/theme/themed-text'
 import ThemedView from '@/components/theme/themed-view'
 import { useRegisterForPushNotification } from '@/hooks/database/permission/use-register-for-push-notification'
 import { useMediaLibraryPermission } from '@/hooks/database/use-media-library-permission'
+import { useGetRandomGifs } from '@/hooks/whatsapp/chats/chat/gifs/use-get-random-gifs'
 
 export default function HomeScreen() {
   const token = useRegisterForPushNotification()
   useMediaLibraryPermission()
-
+  useGetRandomGifs()
   return (
     <ThemedView className="flex-1">
       <ThemedText text="Home" style={[{ fontWeight: '800', fontSize: 20 }]} />

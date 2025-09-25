@@ -3,7 +3,7 @@ import { useEffect, useRef } from 'react'
 import { View } from 'react-native'
 import PageView from 'react-native-pager-view'
 import { Emojis } from './Emojis/emojis'
-import { GifSection } from './Gif/gif'
+import { GifsContent } from './Gifs/gifs-content'
 
 export function SectionsPages() {
   const { currentSection, changeSection } = useStickerStore()
@@ -44,7 +44,7 @@ export function SectionsPages() {
         }}
       >
         <Emojis />
-        <GifSection />
+        <GifsContent />
       </PageView>
     </View>
   )

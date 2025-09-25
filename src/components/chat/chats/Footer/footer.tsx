@@ -1,5 +1,5 @@
 import { Box } from '@/components/ui/box'
-import { ContentStickerOptions } from '../Media/sticker/content-sticker-options'
+import { ContentStickerOptions } from '../sticker/content-sticker-options'
 import { InputMessage } from './input-message'
 import { SendMessage } from './send-message'
 

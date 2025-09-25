@@ -59,7 +59,7 @@ export const useUserContactPersistStore = create<IUserContactStore>()(
       },
     }),
     {
-      name: 'user-contact-storage',
+      name: 'user-contact-storagep',
       storage: mmkvStorage,
     },
   ),

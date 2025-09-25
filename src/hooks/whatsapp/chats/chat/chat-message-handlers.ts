@@ -13,6 +13,8 @@ export function useChatMessageHandler() {
         addMessage(user, {
           ...message,
           content: message.content,
+          mimyType: message.mimyType,
+          gifPlayback: message.gifPlayback,
         })
 
         await saveMediaToDevice(message.content, message.type).then((uri) => {

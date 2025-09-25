@@ -6,7 +6,7 @@ import { useEffect } from 'react'
 export function useQueueSendMensage() {
   const { queue, removeFromQueue } = useMessageQueue()
 
-  const { mutateAsync } = useMutation({
+  const { mutate } = useMutation({
     mutationFn: sendMessage,
     onSuccess: (_, variables) => {
       if (!variables) return
@@ -21,14 +21,16 @@ export function useQueueSendMensage() {
   useEffect(() => {
     let isMounted = true
     const retrySendMessages = async () => {
+      console.log(queue.length)
+
       if (!isMounted) return
       for (const items of queue) {
         try {
-          await mutateAsync({
-            userId: items.user.id,
+          mutate({
             message: items.messages.content,
             destination: items.user.id,
             messageId: items.messages.id,
+            type: items.messages.type,
           })
 
           await new Promise((resolve) => setTimeout(resolve, 1500))
@@ -44,6 +46,8 @@ export function useQueueSendMensage() {
       }
     }
 
-    retrySendMessages()
+    const timeout = setTimeout(() => {
+      retrySendMessages()
+    }, 12000)
   }, [])
 }

@@ -13,6 +13,9 @@ export type IContentMessage = {
   link?: string
   sending: boolean
   imgUrl?: string
+  mimyType?: 'video/mp4'
+  gifPlayback?: boolean
+  isVisible?: boolean
 }
 
 export type IUserMessage = {
@@ -56,6 +59,7 @@ export const useChatStore = create<IChatStore>()(
       messageToSend: null,
       onInputFocus: false,
       userIdtemp: null,
+
       messageIdtemp: null,
       addMessage: (user, message) => {
         const chats = get().chats
@@ -167,6 +171,6 @@ export const useChatStore = create<IChatStore>()(
         })),
     }),
 
-    { name: 'csss', storage: mmkvStorage },
+    { name: 'chat-2b', storage: mmkvStorage },
   ),
 )

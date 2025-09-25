@@ -1,15 +1,16 @@
 import { getUserId } from '@/database/MMKV/get-user-id'
+import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import api from '@/lib/axios'
 
 interface ISendMessage {
-  userId: string
   destination: string
   message: string
+  type: MediaType
   messageId?: string
 }
 
-export async function sendMessage({ userId, destination, message }: ISendMessage) {
-  if (!userId || !destination || !message) {
+export async function sendMessage({ destination, message, type = 'text' }: ISendMessage) {
+  if (!destination || !message || !type) {
     throw new Error('Missing required fields')
   }
 
@@ -18,7 +19,7 @@ export async function sendMessage({ userId, destination, message }: ISendMessage
       userId: getUserId(),
       userToSendMessage: destination,
       message,
-      type: 'text',
+      type: type,
     })
     return response.data
   } catch (error) {

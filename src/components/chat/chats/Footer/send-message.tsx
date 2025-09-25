@@ -6,7 +6,7 @@ interface ISendMessage {
   userId: string
 }
 export function SendMessage({ userId }: ISendMessage) {
-  const { handleSendMessage, isPending, disabled } = useSendMessage(userId)
+  const { handleSendMessage, isPending, disabled } = useSendMessage()
 
   return (
     <TouchableOpacity

@@ -22,7 +22,7 @@ export function useMiddleware() {
         const userData = storaged.getString('userData')
 
         if (userData) {
-          replace('/(private)/(home)/home')
+          replace('/(public)/sign-up')
           return
         }
         replace('/(public)/sign-up')

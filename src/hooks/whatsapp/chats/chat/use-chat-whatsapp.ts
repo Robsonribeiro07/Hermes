@@ -3,25 +3,26 @@ import { useChatWhatsappStore } from '@/store/whatsapp/chats/chat-store'
 import { useMessageQueue } from '@/store/whatsapp/chats/message-queue'
 import { useMemo } from 'react'
 
-export function useChatWhatsapp(userId: string) {
+export function useChatWhatsapp() {
   const { FilterMessages, inputTextFilter } = useChatWhatsappStore()
+  const { userIdtemp } = useChatStore()
   const { queue } = useMessageQueue()
   const { chats } = useChatStore()
 
-  const findChatUser = chats.find((u) => u.user.id === userId)
+  const findChatUser = chats.find((u) => u.user.id === userIdtemp)
 
   const messagesToRender = useMemo(
     () => [
-      ...queue.filter((q) => q.user.id === userId).map((q) => q.messages),
-      ...(findChatUser?.messages || []),
+      ...queue.filter((q) => q.user.id === userIdtemp).map((q) => q.messages),
+      ...(findChatUser?.messages.map((m) => ({ ...m, date: new Date(m.date) })) || []),
     ],
-    [findChatUser, queue, userId],
+    [findChatUser, queue, userIdtemp, chats],
   )
 
   const filteredMessages = useMemo(() => {
     if (!messagesToRender) return []
 
-    const userFilter = FilterMessages.find((u) => u.userId === userId)
+    const userFilter = FilterMessages.find((u) => u.userId === userIdtemp)
 
     return messagesToRender.filter((m) => {
       const matchData = userFilter?.date ? m.date.toString() === userFilter.date.toString() : true
@@ -30,7 +31,7 @@ export function useChatWhatsapp(userId: string) {
         : true
       return matchData && matchText
     })
-  }, [messagesToRender, FilterMessages, inputTextFilter, userId])
+  }, [messagesToRender, FilterMessages, inputTextFilter, userIdtemp])
 
   return {
     user: findChatUser,

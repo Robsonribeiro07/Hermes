@@ -19,7 +19,7 @@ export const initSocket = async (userId: string) => {
     })
   }
 
-  await SycronizeAllData()
+  SycronizeAllData()
 }
 export const getSocketServices = (): Socket => {
   if (!socket) throw new Error('socker not initilzized. Call IniitSocket() fisrt')

@@ -70,7 +70,7 @@ export const useChatIAStore = create<IChatIA>()(
         }),
     }),
     {
-      name: 'chat-ia-messages',
+      name: 'chat-ia-messag',
       storage: mmkvStorage,
     },
   ),
