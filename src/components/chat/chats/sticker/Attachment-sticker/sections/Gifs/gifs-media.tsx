@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import { useSendMessage } from '@/hooks/whatsapp/chats/chat/use-send-message'
+import { useSendMessage } from '@/hooks/whatsapp/chats/chat/use-send-message-mutation'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import FastImage from 'react-native-fast-image'
@@ -20,12 +20,7 @@ export const GifsMedia = React.memo(({ url }: { url: string }) => {
           handleSendGiftMessage(url)
         }}
       >
-        <FastImage
-          source={{ uri: url }}
-          style={{ width: 100, height: 100 }}
-          resizeMode="cover"
-          onLoad={() => setLoaded(true)}
-        />
+        <FastImage source={{ uri: url }} style={{ width: 100, height: 100 }} resizeMode="cover" onLoad={() => setLoaded(true)} />
       </TouchableOpacity>
     </>
   )

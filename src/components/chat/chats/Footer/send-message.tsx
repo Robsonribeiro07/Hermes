@@ -1,4 +1,4 @@
-import { useSendMessage } from '@/hooks/whatsapp/chats/chat/use-send-message'
+import { useSendMessage } from '@/hooks/whatsapp/chats/chat/reactions-message/use-send-message'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity } from 'react-native'
 

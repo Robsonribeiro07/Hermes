@@ -13,7 +13,7 @@ export const mediaMap: Record<MediaType, (props: IContentMessage) => React.React
   image: (props) => <ImageMedia {...props} />,
   video: (props) => {
     if (props.mimyType === 'video/mp4' && props.gifPlayback) {
-      return <GifMedia uri={props.content} isVisible={props.isVisible} />
+      return <GifMedia uri={props.content} />
     }
     return <VideoMedia uri={props.content} isVisible={props.isVisible} />
   },
@@ -29,7 +29,5 @@ export const mediaMap: Record<MediaType, (props: IContentMessage) => React.React
   ptv: (props) => <ImageMedia {...props} />,
   ptt: (props) => <ImageMedia {...props} />,
   sticker: (props) => <StickerAnimado uri={props.content} />,
-  text: ({ fromMe, content, sending }) => (
-    <TextMedia content={content} fromMe={fromMe} sending={sending} />
-  ),
+  text: ({ fromMe, content, sending }) => <TextMedia content={content} fromMe={fromMe} sending={sending} />,
 }

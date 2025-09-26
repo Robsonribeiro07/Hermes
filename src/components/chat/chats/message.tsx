@@ -1,15 +1,35 @@
+// components/chat/chats/message.tsx
 import { Box } from '@/components/ui/box'
 import { AvatarProfile } from '@/components/user/avatar-profile'
+import { useLongPressGesture } from '@/hooks/use-long-press'
 import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
 import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
-import React from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import React, { useCallback } from 'react'
+import { Text, View } from 'react-native'
+import { GestureDetector } from 'react-native-gesture-handler'
 import { mediaMap } from './map-media'
 
 function MessageChatComponent({ content, date, id, fromMe, type = 'text', imgUrl, sending, mimyType, gifPlayback }: IContentMessage) {
   const newDate = new Date(date)
   const ComponentRenderMedia = mediaMap[type]
   const { setOpen, addElementPosition, setRecentMessageId } = useReactionStore()
+
+  const handleLongPress = useCallback(
+    (x: number, y: number) => {
+      setOpen(true)
+      setRecentMessageId(id)
+      addElementPosition({ x, y })
+    },
+    [id, setOpen, setRecentMessageId, addElementPosition],
+  )
+
+  const longPressGesture = useLongPressGesture({
+    onLongPress: handleLongPress,
+    enabled: true,
+    sending: sending,
+    messageId: id,
+    minDuration: 200,
+  })
 
   return (
     <Box className="w-full my-2 min-h-[100px]" id={id}>
@@ -18,27 +38,22 @@ function MessageChatComponent({ content, date, id, fromMe, type = 'text', imgUrl
           fromMe ? 'ml-auto bg-green-400' : 'bg-gray-200 mr-auto ml-10'
         }`}
       >
-        <TouchableOpacity
-          onLongPress={(event: any) => {
-            if (sending) return
-            setOpen(true)
-            setRecentMessageId(id)
-            addElementPosition({ x: event.nativeEvent.pageX, y: event.nativeEvent.pageY })
-          }}
-        >
-          <ComponentRenderMedia
-            content={content}
-            fromMe={fromMe}
-            id={id}
-            key={id}
-            sending={sending}
-            imgUrl={imgUrl}
-            type={type}
-            date={date}
-            mimyType={mimyType}
-            gifPlayback={gifPlayback}
-          />
-        </TouchableOpacity>
+        <GestureDetector gesture={longPressGesture}>
+          <View collapsable={false}>
+            <ComponentRenderMedia
+              content={content}
+              fromMe={fromMe}
+              id={id}
+              key={id}
+              sending={sending}
+              imgUrl={imgUrl}
+              type={type}
+              date={date}
+              mimyType={mimyType}
+              gifPlayback={gifPlayback}
+            />
+          </View>
+        </GestureDetector>
       </Box>
 
       <Box className={`flex-row items-center gap-3 ${fromMe ? 'ml-auto ' : 'mr-auto'}`}>

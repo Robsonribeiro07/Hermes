@@ -86,9 +86,7 @@ export const useChatStore = create<IChatStore>()(
             c.user.id === userId
               ? {
                   ...c,
-                  messages: c.messages.map((m) =>
-                    m.id === messageId ? { ...m, content: newMessage } : m,
-                  ),
+                  messages: c.messages.map((m) => (m.id === messageId ? { ...m, content: newMessage } : m)),
                 }
               : c,
           ),
@@ -144,8 +142,7 @@ export const useChatStore = create<IChatStore>()(
           const userId = state.userIdtemp
           const messageId = state.messageIdtemp
 
-          if (!state.messageToSend || !userId || !messageId)
-            return { messageToSend: state.messageToSend }
+          if (!state.messageToSend || !userId || !messageId) return { messageToSend: state.messageToSend }
 
           const updated = state.messageToSend.map((m) => {
             if (m.user.id === userId && m.message.id === messageId) {
@@ -164,9 +161,7 @@ export const useChatStore = create<IChatStore>()(
         }),
       removeMessageToSend: (messageId: string) =>
         set((state) => ({
-          messageToSend: state.messageToSend
-            ? state.messageToSend.filter((m) => m.message.id !== messageId)
-            : null,
+          messageToSend: state.messageToSend ? state.messageToSend.filter((m) => m.message.id !== messageId) : null,
         })),
     }),
 

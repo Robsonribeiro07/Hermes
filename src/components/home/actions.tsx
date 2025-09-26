@@ -24,7 +24,7 @@ const actionsConfig: Record<
   }
 > = {
   CreateRaffle: { label: 'Create Raffle', icon: 'plus', library: 'AntDesign' },
-  SendMessage: { label: 'Send Message', icon: 'send', library: 'Ionicons' },
+  SendMessage: { label: 'Chats', icon: 'send', library: 'Ionicons' },
   ManageGroups: { label: 'Manage Groups', icon: 'people', library: 'Ionicons' },
   Settings: { label: 'Settings', icon: 'settings', library: 'Ionicons' },
 }
@@ -43,19 +43,10 @@ const Actions = ({ actions }: IActions) => {
       activeOpacity={0.6}
       onPress={() => push('/(private)/chats/chat/[id]')}
     >
-      <ThemedView
-        className="w-full mt-4 h-48 rounded-2xl items-center justify-center"
-        lightColor={colors.lightBlue}
-        darkColor={colors.lightBlue}
-      >
+      <ThemedView className="w-full mt-4 h-48 rounded-2xl items-center justify-center" lightColor={colors.lightBlue} darkColor={colors.lightBlue}>
         <View className="flex-col items-center">
           <IconComponent name={action.icon as any} size={30} color={colors.blueText} />
-          <ThemedText
-            text={action.label}
-            size={13}
-            lightColor={colors.text}
-            darkColor={colors.foreground}
-          />
+          <ThemedText text={action.label} size={13} lightColor={colors.text} darkColor={colors.foreground} />
         </View>
       </ThemedView>
     </TouchableOpacity>

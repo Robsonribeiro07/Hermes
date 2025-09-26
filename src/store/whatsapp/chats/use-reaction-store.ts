@@ -29,7 +29,7 @@ interface ReactionStore {
   elementPosition: { x: number; y: number }
   addElementPosition: (position: { x: number; y: number }) => void
   addReaction: (userId: string, messageId: string, reaction: Reaction) => void
-  removeReaction: (userId: string, messageId: string, reactionId: string) => void
+  removeReaction: (userId: string, messageId: string, reactionUserId: string) => void
   clearMessageReactions: (userId: string, messageId: string) => void
   getMessageReactions: (userId: string, messageId: string) => Reaction[]
 }
@@ -52,7 +52,6 @@ export const useReactionStore = create<ReactionStore>()(
       addReaction: (userId, messageId, reaction) =>
         set((state) => {
           const userIndex = state.userMessages.findIndex((um) => um.userId === userId)
-          const updatedUserMessages = [...state.userMessages]
           if (userIndex < 0) {
             return {
               userMessages: [
@@ -64,32 +63,65 @@ export const useReactionStore = create<ReactionStore>()(
               ],
             }
           }
-          const messageIndex = updatedUserMessages[userIndex].messages.findIndex((m) => m.id === messageId)
+
+          const messageIndex = state.userMessages[userIndex].messages.findIndex((m) => m.id === messageId)
+
           if (messageIndex < 0) {
-            updatedUserMessages[userIndex].messages.push({ id: messageId, reactions: [reaction] })
-          } else {
-            const message = updatedUserMessages[userIndex].messages[messageIndex]
-
-            const existingReactionIndex = message.reactions.findIndex((r) => r.id === reaction.id)
-
-            if (existingReactionIndex >= 0) {
-              message.reactions.splice(existingReactionIndex, 1)
-            } else {
-              message.reactions.push(reaction)
+            return {
+              userMessages: state.userMessages.map((um, index) =>
+                index === userIndex
+                  ? {
+                      ...um,
+                      messages: [...um.messages, { id: messageId, reactions: [reaction] }],
+                    }
+                  : um,
+              ),
             }
-            updatedUserMessages[userIndex].messages[messageIndex] = { ...message }
-          }
+          } else {
+            const currentMessage = state.userMessages[userIndex].messages[messageIndex]
+            const existingUserReactionIndex = currentMessage.reactions.findIndex((r) => r.userId === reaction.userId)
 
-          return { userMessages: updatedUserMessages }
+            let newReactions: Reaction[]
+
+            if (existingUserReactionIndex >= 0) {
+              const existingReaction = currentMessage.reactions[existingUserReactionIndex]
+
+              if (existingReaction.emoji === reaction.emoji) {
+                newReactions = currentMessage.reactions.filter((_, index) => index !== existingUserReactionIndex)
+              } else {
+                newReactions = currentMessage.reactions.map((r, index) => (index === existingUserReactionIndex ? reaction : r))
+              }
+            } else {
+              newReactions = [...currentMessage.reactions, reaction]
+            }
+
+            return {
+              userMessages: state.userMessages.map((um, umIndex) =>
+                umIndex === userIndex
+                  ? {
+                      ...um,
+                      messages: um.messages.map((m, mIndex) => (mIndex === messageIndex ? { ...m, reactions: newReactions } : m)),
+                    }
+                  : um,
+              ),
+            }
+          }
         }),
 
-      removeReaction: (userId, messageId, reactionId) =>
+      removeReaction: (userId, messageId, reactionUserId) =>
         set((state) => ({
           userMessages: state.userMessages.map((um) =>
             um.userId === userId
               ? {
                   ...um,
-                  messages: um.messages.map((m) => (m.id === messageId ? { ...m, reactions: m.reactions.filter((r) => r.id !== reactionId) } : m)),
+                  messages: um.messages.map((m) =>
+                    m.id === messageId
+                      ? {
+                          ...m,
+                          reactions: m.reactions.filter((r) => r.userId !== reactionUserId),
+                        }
+                      : m,
+                  ),
                 }
               : um,
           ),
@@ -127,7 +159,7 @@ export const useReactionStore = create<ReactionStore>()(
         }),
     }),
     {
-      name: 'reaction-storageeb',
+      name: 'reaction-storageebs',
       storage: mmkvStorage,
     },
   ),

@@ -45,7 +45,7 @@ export function ReactionOverlay() {
         className="items-center justify-center gap-2 flex-row p-0 rounded-[25px] absolute "
         style={{
           height: 50,
-          width: width * 0.8,
+          width: width * 0.7,
           left: elementPosition.x,
           top: elementPosition.y,
         }}

@@ -1,30 +1,20 @@
 import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
-import { Reaction, useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
+import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
 import { useMemo } from 'react'
 
 export function useReaction() {
   const { userIdtemp } = useChatStore()
-  const { recentMessageId, userMessages, addReaction, getMessageReactions } = useReactionStore()
+  const { recentMessageId, userMessages, getMessageReactions } = useReactionStore()
 
-  const reactionMessage = useMemo(() => {
-    return userMessages.find((m) => m.userId === userIdtemp)?.messages
-  }, [userIdtemp])
+  console.log(getMessageReactions(userIdtemp!, recentMessageId!))
+  const hasReaction = useMemo(() => {
+    if (!userIdtemp || !recentMessageId) return []
 
-  const hasReaction = useMemo(() => getMessageReactions(userIdtemp || '', recentMessageId || ''), [userMessages, reactionMessage])
+    const result = getMessageReactions(userIdtemp, recentMessageId)
+    return result
+  }, [userIdtemp, recentMessageId, userMessages])
 
-  const addReactionFn = (emojiId: Omit<Reaction, 'timestamp'>) => {
-    if (!recentMessageId || !userIdtemp) return
-    console.log(userMessages)
-
-    const newReaction: Reaction = {
-      ...emojiId,
-      timestamp: new Date(),
-    }
-    addReaction(userIdtemp, recentMessageId, newReaction)
-  }
   return {
     hasReaction,
-    reactionMessage,
-    addReactionFn,
   }
 }
