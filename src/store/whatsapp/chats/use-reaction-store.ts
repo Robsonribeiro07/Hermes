@@ -1,14 +1,16 @@
+import { mmkvStorage } from '@/database/MMKV/conctact'
 import { Dimensions } from 'react-native'
 import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
 
-interface Reaction {
+export interface Reaction {
   id: string
   emoji: string
   userId: string
   timestamp: Date
 }
 
-interface Message {
+export interface Message {
   id: string
   reactions: Reaction[]
 }
@@ -21,115 +23,112 @@ interface UserMessages {
 interface ReactionStore {
   userMessages: UserMessages[]
   open: boolean
+  recentMessageId?: string
+  setRecentMessageId: (id: string) => void
   setOpen: (open: boolean) => void
   elementPosition: { x: number; y: number }
   addElementPosition: (position: { x: number; y: number }) => void
-  addReaction: (userId: string, messageId: string, reaction: Omit<Reaction, 'id' | 'timestamp'>) => void
+  addReaction: (userId: string, messageId: string, reaction: Reaction) => void
   removeReaction: (userId: string, messageId: string, reactionId: string) => void
   clearMessageReactions: (userId: string, messageId: string) => void
   getMessageReactions: (userId: string, messageId: string) => Reaction[]
-  addMessage: (userId: string, messageId: string) => void
 }
 
 const { width, height } = Dimensions.get('window')
-export const useReactionStore = create<ReactionStore>((set, get) => ({
-  userMessages: [],
-  open: false,
-  elementPosition: {
-    x: 0,
-    y: 0,
-  },
+export const useReactionStore = create<ReactionStore>()(
+  persist(
+    (set, get) => ({
+      userMessages: [],
+      recentMessageId: undefined,
+      setRecentMessageId: (id) => set(() => ({ recentMessageId: id })),
+      open: false,
+      elementPosition: {
+        x: 0,
+        y: 0,
+      },
 
-  setOpen: (open) => set(() => ({ open })),
-  addMessage: (userId, messageId) =>
-    set((state) => {
-      const userIndex = state.userMessages.findIndex((um) => um.userId === userId)
+      setOpen: (open) => set(() => ({ open })),
 
-      if (userIndex >= 0) {
-        const messageExists = state.userMessages[userIndex].messages.some((m) => m.id === messageId)
-        if (!messageExists) {
+      addReaction: (userId, messageId, reaction) =>
+        set((state) => {
+          const userIndex = state.userMessages.findIndex((um) => um.userId === userId)
           const updatedUserMessages = [...state.userMessages]
-          updatedUserMessages[userIndex] = {
-            ...updatedUserMessages[userIndex],
-            messages: [...updatedUserMessages[userIndex].messages, { id: messageId, reactions: [] }],
+          if (userIndex < 0) {
+            return {
+              userMessages: [
+                ...state.userMessages,
+                {
+                  userId,
+                  messages: [{ id: messageId, reactions: [reaction] }],
+                },
+              ],
+            }
           }
+          const messageIndex = updatedUserMessages[userIndex].messages.findIndex((m) => m.id === messageId)
+          if (messageIndex < 0) {
+            updatedUserMessages[userIndex].messages.push({ id: messageId, reactions: [reaction] })
+          } else {
+            const message = updatedUserMessages[userIndex].messages[messageIndex]
+
+            const existingReactionIndex = message.reactions.findIndex((r) => r.id === reaction.id)
+
+            if (existingReactionIndex >= 0) {
+              message.reactions.splice(existingReactionIndex, 1)
+            } else {
+              message.reactions.push(reaction)
+            }
+            updatedUserMessages[userIndex].messages[messageIndex] = { ...message }
+          }
+
           return { userMessages: updatedUserMessages }
-        }
-        return state
-      } else {
-        return {
-          userMessages: [
-            ...state.userMessages,
-            {
-              userId,
-              messages: [{ id: messageId, reactions: [] }],
+        }),
+
+      removeReaction: (userId, messageId, reactionId) =>
+        set((state) => ({
+          userMessages: state.userMessages.map((um) =>
+            um.userId === userId
+              ? {
+                  ...um,
+                  messages: um.messages.map((m) => (m.id === messageId ? { ...m, reactions: m.reactions.filter((r) => r.id !== reactionId) } : m)),
+                }
+              : um,
+          ),
+        })),
+
+      clearMessageReactions: (userId, messageId) =>
+        set((state) => ({
+          userMessages: state.userMessages.map((um) =>
+            um.userId === userId
+              ? {
+                  ...um,
+                  messages: um.messages.map((m) => (m.id === messageId ? { ...m, reactions: [] } : m)),
+                }
+              : um,
+          ),
+        })),
+
+      getMessageReactions: (userId, messageId) => {
+        const userMessages = get().userMessages.find((um) => um.userId === userId)
+        const message = userMessages?.messages.find((m) => m.id === messageId)
+        return message?.reactions || []
+      },
+
+      addElementPosition: (position) =>
+        set(() => {
+          const maxX = width - width * 0.8
+          const maxY = height - 40
+
+          return {
+            elementPosition: {
+              x: Math.max(0, Math.min(position.x, maxX)),
+              y: Math.max(0, Math.min(position.y, maxY)),
             },
-          ],
-        }
-      }
+          }
+        }),
     }),
-
-  addReaction: (userId, messageId, reaction) =>
-    set((state) => {
-      const userIndex = state.userMessages.findIndex((um) => um.userId === userId)
-      if (userIndex < 0) return state
-
-      const messageIndex = state.userMessages[userIndex].messages.findIndex((m) => m.id === messageId)
-      if (messageIndex < 0) return state
-
-      const newReaction = {
-        ...reaction,
-        id: crypto.randomUUID(),
-        timestamp: new Date(),
-      }
-
-      const updatedUserMessages = [...state.userMessages]
-      updatedUserMessages[userIndex] = {
-        ...updatedUserMessages[userIndex],
-        messages: updatedUserMessages[userIndex].messages.map((m, idx) => (idx === messageIndex ? { ...m, reactions: [...m.reactions, newReaction] } : m)),
-      }
-      return { userMessages: updatedUserMessages }
-    }),
-
-  removeReaction: (userId, messageId, reactionId) =>
-    set((state) => ({
-      userMessages: state.userMessages.map((um) =>
-        um.userId === userId
-          ? {
-              ...um,
-              messages: um.messages.map((m) => (m.id === messageId ? { ...m, reactions: m.reactions.filter((r) => r.id !== reactionId) } : m)),
-            }
-          : um,
-      ),
-    })),
-
-  clearMessageReactions: (userId, messageId) =>
-    set((state) => ({
-      userMessages: state.userMessages.map((um) =>
-        um.userId === userId
-          ? {
-              ...um,
-              messages: um.messages.map((m) => (m.id === messageId ? { ...m, reactions: [] } : m)),
-            }
-          : um,
-      ),
-    })),
-
-  getMessageReactions: (userId, messageId) => {
-    const userMessages = get().userMessages.find((um) => um.userId === userId)
-    const message = userMessages?.messages.find((m) => m.id === messageId)
-    return message?.reactions || []
-  },
-  addElementPosition: (position) =>
-    set(() => {
-      const maxX = width - width * 0.8
-      const maxY = height - 40
-
-      return {
-        elementPosition: {
-          x: Math.max(0, Math.min(position.x, maxX)),
-          y: Math.max(0, Math.min(position.y, maxY)),
-        },
-      }
-    }),
-}))
+    {
+      name: 'reaction-storageeb',
+      storage: mmkvStorage,
+    },
+  ),
+)

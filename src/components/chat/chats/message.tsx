@@ -9,7 +9,7 @@ import { mediaMap } from './map-media'
 function MessageChatComponent({ content, date, id, fromMe, type = 'text', imgUrl, sending, mimyType, gifPlayback }: IContentMessage) {
   const newDate = new Date(date)
   const ComponentRenderMedia = mediaMap[type]
-  const { setOpen, addElementPosition } = useReactionStore()
+  const { setOpen, addElementPosition, setRecentMessageId } = useReactionStore()
 
   return (
     <Box className="w-full my-2 min-h-[100px]" id={id}>
@@ -22,6 +22,7 @@ function MessageChatComponent({ content, date, id, fromMe, type = 'text', imgUrl
           onLongPress={(event: any) => {
             if (sending) return
             setOpen(true)
+            setRecentMessageId(id)
             addElementPosition({ x: event.nativeEvent.pageX, y: event.nativeEvent.pageY })
           }}
         >

@@ -1,8 +1,8 @@
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent } from '@/components/ui/alert-dialog'
-import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
+import { Reaction, useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity, useWindowDimensions } from 'react-native'
-import { Reaction } from './reaction'
+import { ReactionComponent } from './reaction'
 
 interface IReactionOverlayProps {
   visible: boolean
@@ -11,9 +11,30 @@ interface IReactionOverlayProps {
   onClose: () => void
 }
 
-const REACTIONS = ['👍', '❤️', '😂', '😮', '😢', '🙏']
+const REACTIONS: Omit<Reaction, 'userId' | 'timestamp'>[] = [
+  {
+    id: '1',
+    emoji: '👍',
+  },
+  {
+    id: '2',
+    emoji: '❤️',
+  },
+  {
+    id: '3',
+    emoji: '😂',
+  },
+  {
+    id: '4',
+    emoji: '😮',
+  },
+  {
+    id: '5',
+    emoji: '😢',
+  },
+]
 
-export function ReactionOverlay({ visible, touchPosition, onReactionSelect, onClose }: IReactionOverlayProps) {
+export function ReactionOverlay() {
   const { width } = useWindowDimensions()
 
   const { elementPosition, open, setOpen } = useReactionStore()
@@ -30,7 +51,7 @@ export function ReactionOverlay({ visible, touchPosition, onReactionSelect, onCl
         }}
       >
         {REACTIONS.map((reaction) => (
-          <Reaction key={reaction} reaction={reaction} />
+          <ReactionComponent key={reaction.id} emoji={reaction.emoji} id={reaction.id} />
         ))}
 
         <TouchableOpacity className="absolute right-2 bg-secondary-500 p-1 rounded-full">
