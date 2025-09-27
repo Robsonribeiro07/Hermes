@@ -2,6 +2,7 @@ import { AlertDialog, AlertDialogBackdrop, AlertDialogContent } from '@/componen
 import { Reaction, useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity, useWindowDimensions } from 'react-native'
+import { Emojis } from '../sticker/Attachment-sticker/sections/Emojis/emojis'
 import { ReactionComponent } from './reaction'
 
 interface IReactionOverlayProps {
@@ -37,9 +38,15 @@ const REACTIONS: Omit<Reaction, 'userId' | 'timestamp'>[] = [
 export function ReactionOverlay() {
   const { width } = useWindowDimensions()
 
-  const { elementPosition, open, setOpen } = useReactionStore()
+  const { elementPosition, open, setOpen, showAllReactions, setShollAllReactions } = useReactionStore()
   return (
-    <AlertDialog isOpen={open} onClose={() => setOpen(false)}>
+    <AlertDialog
+      isOpen={open}
+      onClose={() => {
+        setOpen(false)
+        setShollAllReactions(false)
+      }}
+    >
       <AlertDialogBackdrop />
       <AlertDialogContent
         className="items-center justify-center gap-2 flex-row p-0 rounded-[25px] absolute "
@@ -54,10 +61,21 @@ export function ReactionOverlay() {
           <ReactionComponent key={reaction.id} emoji={reaction.emoji} id={reaction.id} />
         ))}
 
-        <TouchableOpacity className="absolute right-2 bg-secondary-500 p-1 rounded-full">
+        <TouchableOpacity
+          className="absolute right-2 bg-secondary-500 p-1 rounded-full"
+          onPress={() => {
+            setShollAllReactions(true)
+          }}
+        >
           <Ionicons name="add-outline" size={25} />
         </TouchableOpacity>
       </AlertDialogContent>
+
+      {showAllReactions && (
+        <AlertDialogContent className="absolute bottom-0 w-screen">
+          <Emojis comportment="reaction" />
+        </AlertDialogContent>
+      )}
     </AlertDialog>
   )
 }

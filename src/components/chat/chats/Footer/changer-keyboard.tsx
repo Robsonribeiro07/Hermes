@@ -17,7 +17,7 @@ export function ChangerKeyboard() {
   ) : (
     <TouchableOpacity
       onPress={() => {
-        setOpenModal(true)
+        setOpenModal(false)
         settypeKeyboard('keyboard')
       }}
     >

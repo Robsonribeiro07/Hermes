@@ -24,6 +24,8 @@ interface ReactionStore {
   userMessages: UserMessages[]
   open: boolean
   recentMessageId?: string
+  showAllReactions?: boolean
+  setShollAllReactions: (show: boolean) => void
   setRecentMessageId: (id: string) => void
   setOpen: (open: boolean) => void
   elementPosition: { x: number; y: number }
@@ -40,6 +42,8 @@ export const useReactionStore = create<ReactionStore>()(
     (set, get) => ({
       userMessages: [],
       recentMessageId: undefined,
+      showAllReactions: false,
+      setShollAllReactions: (show) => set(() => ({ showAllReactions: show })),
       setRecentMessageId: (id) => set(() => ({ recentMessageId: id })),
       open: false,
       elementPosition: {
@@ -159,7 +163,7 @@ export const useReactionStore = create<ReactionStore>()(
         }),
     }),
     {
-      name: 'reaction-storageebs',
+      name: 'reaction-storageebss',
       storage: mmkvStorage,
     },
   ),

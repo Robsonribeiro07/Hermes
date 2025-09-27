@@ -11,7 +11,7 @@ export interface ISendMessage {
 }
 
 export async function sendMessage({ destination, message, messageId, participantId, type = 'text' }: ISendMessage) {
-  if (!destination || !message || !type) {
+  if (!destination || !type) {
     throw new Error('Missing required fields')
   }
 

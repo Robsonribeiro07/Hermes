@@ -1,8 +1,10 @@
 import { useSendMessageMutation } from '../use-send-message-mutation'
+import { useReaction } from './use-reaction'
 
 export function useSendMessage() {
   const { mutate, recentMessageId, userIdtemp, currentMessage, disabled, isPending } = useSendMessageMutation()
 
+  const { hasReaction } = useReaction()
   const handleSendGiftMessage = (gifUrl: string) => {
     const messageId = Math.random().toString(36).substring(7)
     mutate({
@@ -23,9 +25,13 @@ export function useSendMessage() {
   }
 
   const handleSendReactionMessage = (reaction: string) => {
-    console.log('handleSendReactionMessage', { reaction, recentMessageId, userIdtemp })
+    const hasReactionFlag = hasReaction?.some((r) => r.emoji === reaction) ?? false
+
+    const removeReactionWithHasReaction = hasReactionFlag ? '' : reaction
+
+    console.log(removeReactionWithHasReaction, 'removeReactionWithHasReaction')
     mutate({
-      message: reaction,
+      message: removeReactionWithHasReaction,
       destination: userIdtemp!,
       type: 'react',
       messageId: recentMessageId,

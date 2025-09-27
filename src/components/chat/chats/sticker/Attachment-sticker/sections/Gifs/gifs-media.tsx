@@ -1,5 +1,5 @@
 import { Skeleton } from '@/components/ui/skeleton'
-import { useSendMessage } from '@/hooks/whatsapp/chats/chat/use-send-message-mutation'
+import { useSendMessage } from '@/hooks/whatsapp/chats/chat/reactions-message/use-send-message'
 import React, { useState } from 'react'
 import { TouchableOpacity } from 'react-native'
 import FastImage from 'react-native-fast-image'

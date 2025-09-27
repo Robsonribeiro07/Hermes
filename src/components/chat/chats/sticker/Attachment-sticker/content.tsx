@@ -10,7 +10,6 @@ export function ContentAttachmmentSticker() {
   const { openModal, setOpenModal } = useEmojiStore()
   const { typeKeyboard } = useEmojiStore()
   const { onInputFocus } = useChatStore()
-  const openState = openModal && !onInputFocus && typeKeyboard === 'emoji'
   const [height] = useState(new Animated.Value(0))
 
   useBackHandler({
@@ -25,16 +24,16 @@ export function ContentAttachmmentSticker() {
 
   useEffect(() => {
     Animated.timing(height, {
-      toValue: openState ? 300 : 0,
+      toValue: openModal ? 300 : 0,
       duration: 50,
       useNativeDriver: false,
     }).start()
-  }, [openState])
+  }, [openModal])
 
-  if (!openState) return null
+  if (!openModal) return null
   return (
     <Animated.View style={{ height }}>
-      <View style={{ flex: 1, paddingHorizontal: 10 }}>
+      <View style={{ flex: 1, paddingHorizontal: 10, zIndex: 999, elevation: 999 }}>
         <Header />
         <SectionsPages />
       </View>

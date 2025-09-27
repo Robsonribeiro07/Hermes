@@ -1,8 +1,8 @@
 import { useChatWhatsapp } from '@/hooks/whatsapp/chats/chat/use-chat-whatsapp'
 import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
-import { useCallback, useEffect } from 'react'
+import { useCallback } from 'react'
 import { FlatList } from 'react-native'
-import { MessageChat } from './message'
+import { MessageChat } from './message/message'
 
 export function ContentMessage() {
   const { filteredMessages } = useChatWhatsapp()
@@ -10,11 +10,6 @@ export function ContentMessage() {
   const renderItem = useCallback(({ item }: { item: IContentMessage }) => {
     return <MessageChat {...item} key={item.id} />
   }, [])
-
-  useEffect(() => {
-    console.log(filteredMessages.length, 'mudou')
-  }, [filteredMessages])
-  if (!filteredMessages) return null
 
   return (
     <FlatList

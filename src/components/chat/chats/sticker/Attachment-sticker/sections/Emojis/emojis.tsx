@@ -4,7 +4,10 @@ import { FlatList, Text } from 'react-native'
 import { ButtonChangerCategoryEmoji } from './footer'
 import { EmojiItem } from './item-emoji'
 
-export function Emojis() {
+interface IsEmojisProps {
+  comportment?: 'text' | 'reaction'
+}
+export function Emojis({ comportment = 'text' }: IsEmojisProps) {
   const { currentEmojis } = useEmojis()
 
   return (
@@ -19,7 +22,7 @@ export function Emojis() {
         horizontal
         numColumns={1}
         windowSize={5}
-        renderItem={({ item }) => <EmojiItem emoji={item} key={item} />}
+        renderItem={({ item }) => <EmojiItem emoji={item} key={item} comportment={comportment} />}
         showsHorizontalScrollIndicator={false}
         removeClippedSubviews={false}
       />
@@ -31,7 +34,7 @@ export function Emojis() {
         data={currentEmojis}
         showsVerticalScrollIndicator={false}
         numColumns={10}
-        renderItem={({ item }) => <EmojiItem emoji={item} key={item} />}
+        renderItem={({ item }) => <EmojiItem emoji={item} key={item} comportment={comportment} />}
         removeClippedSubviews={false}
         scrollEventThrottle={16}
         onEndReachedThreshold={0.5}

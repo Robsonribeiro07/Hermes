@@ -1,20 +1,32 @@
 import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
 import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
-import { useMemo } from 'react'
+import { useCallback, useMemo } from 'react'
 
 export function useReaction() {
   const { userIdtemp } = useChatStore()
   const { recentMessageId, userMessages, getMessageReactions } = useReactionStore()
 
-  console.log(getMessageReactions(userIdtemp!, recentMessageId!))
   const hasReaction = useMemo(() => {
     if (!userIdtemp || !recentMessageId) return []
 
     const result = getMessageReactions(userIdtemp, recentMessageId)
     return result
-  }, [userIdtemp, recentMessageId, userMessages])
+  }, [userIdtemp, recentMessageId, userMessages, getMessageReactions])
+
+  const getReactionMessage = useCallback(
+    (messageId: string) => {
+      if (!userIdtemp || !messageId) return []
+
+      const result = getMessageReactions(userIdtemp, messageId)
+      console.log(result)
+      return result
+    },
+    [userIdtemp, getMessageReactions, userMessages],
+  )
 
   return {
     hasReaction,
+    getMessageReactions,
+    getReactionMessage,
   }
 }
