@@ -6,6 +6,7 @@ import { GluestackUIProvider } from '@/components/ui/gluestack-ui-provider'
 import queryClient from '@/lib/query-client'
 import { ThemeProvider } from '@/theme/theme-context'
 import { QueryClientProvider } from '@tanstack/react-query'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function RootLayout() {
   const [loaded] = useFonts({
@@ -20,12 +21,14 @@ export default function RootLayout() {
   if (!loaded) return null
 
   return (
-    <GluestackUIProvider mode="light">
-      <ThemeProvider>
-        <QueryClientProvider client={queryClient}>
-          <App />
-        </QueryClientProvider>
-      </ThemeProvider>
-    </GluestackUIProvider>
+    <QueryClientProvider client={queryClient}>
+      <GluestackUIProvider mode="light">
+        <ThemeProvider>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <App />
+          </GestureHandlerRootView>
+        </ThemeProvider>
+      </GluestackUIProvider>
+    </QueryClientProvider>
   )
 }

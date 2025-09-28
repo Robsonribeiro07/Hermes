@@ -18,7 +18,7 @@ export default function RootLayoutPrivate() {
 
   const { colors } = useTheme()
 
-  const hideHeaderScreen = ['settings', 'groups', '[id]']
+  const hideHeaderScreen = ['settings', 'groups', '[id]', 'chats']
   const hiderPadding = ['[id]']
 
   const showHeader = !hideHeaderScreen.includes(segments[segments.length - 1])

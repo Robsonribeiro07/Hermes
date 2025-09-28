@@ -2,6 +2,7 @@ import { mmkvStorage } from '@/database/MMKV/conctact'
 import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { ReactionReceived } from './reactions/use-reaction-store'
 
 export type IContentMessage = {
   content: string
@@ -27,6 +28,7 @@ export type IUserMessage = {
 export type typeDataReceived = {
   user: IUserMessage
   message: IContentMessage
+  reaction?: ReactionReceived
 }
 
 export interface IUserChat {
@@ -62,24 +64,23 @@ export const useChatStore = create<IChatStore>()(
 
       messageIdtemp: null,
       addMessage: (user, message) => {
-        const chats = get().chats
+        set((state) => {
+          const chats = [...state.chats]
+          const userChat = chats.find((c) => c.user.id === user.id)
 
-        const userChat = chats.find((c) => c.user.id === user.id)
-
-        if (userChat) {
-          if (!userChat.messages.includes(message)) {
-            if (userChat.messages.some((m) => m.id === message.id)) {
-              console.error('mensagem ja existe no chat')
-              return
+          if (userChat) {
+            const exists = userChat.messages.some((m) => m.id === message.id)
+            if (exists) {
+              console.error('mensagem já existe no chat')
+              return { chats } // retorna o estado sem alterações
             }
-            userChat.messages.unshift(message)
+
+            userChat.messages = [message, ...userChat.messages]
+            return { chats }
+          } else {
+            return { chats: [...chats, { user, messages: [message] }] }
           }
-          set({ chats: [...chats] })
-        } else {
-          set({
-            chats: [...chats, { user, messages: [message] }],
-          })
-        }
+        })
       },
       updateUriMediaLocal: (userId: string, newMessage: string, messageId: string) =>
         set((state) => ({
@@ -87,9 +88,7 @@ export const useChatStore = create<IChatStore>()(
             c.user.id === userId
               ? {
                   ...c,
-                  messages: c.messages.map((m) =>
-                    m.id === messageId ? { ...m, content: newMessage } : m,
-                  ),
+                  messages: c.messages.map((m) => (m.id === messageId ? { ...m, content: newMessage } : m)),
                 }
               : c,
           ),
@@ -145,8 +144,7 @@ export const useChatStore = create<IChatStore>()(
           const userId = state.userIdtemp
           const messageId = state.messageIdtemp
 
-          if (!state.messageToSend || !userId || !messageId)
-            return { messageToSend: state.messageToSend }
+          if (!state.messageToSend || !userId || !messageId) return { messageToSend: state.messageToSend }
 
           const updated = state.messageToSend.map((m) => {
             if (m.user.id === userId && m.message.id === messageId) {
@@ -154,7 +152,7 @@ export const useChatStore = create<IChatStore>()(
                 ...m,
                 message: {
                   ...m.message,
-                  content: m.message.content + emoji, // concatena o emoji
+                  content: m.message.content + emoji,
                 },
               }
             }
@@ -165,12 +163,10 @@ export const useChatStore = create<IChatStore>()(
         }),
       removeMessageToSend: (messageId: string) =>
         set((state) => ({
-          messageToSend: state.messageToSend
-            ? state.messageToSend.filter((m) => m.message.id !== messageId)
-            : null,
+          messageToSend: state.messageToSend ? state.messageToSend.filter((m) => m.message.id !== messageId) : null,
         })),
     }),
 
-    { name: 'chat-2b', storage: mmkvStorage },
+    { name: 'chat-2bbb2v', storage: mmkvStorage },
   ),
 )

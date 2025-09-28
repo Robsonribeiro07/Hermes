@@ -14,3 +14,4 @@ export type MediaType =
   | 'thumbnail-link'
   | 'ptv'
   | 'text'
+  | 'react'

@@ -15,13 +15,11 @@ export function useSignUp() {
       const { QRcode, base64, user, message, statusBot } = data
 
       if (message === 'bot-connectado' && statusBot === true) {
-        console.log('Voce ja tem conta, so sera redicionado, e seu bot esta conectado')
         replace('/(private)/(home)/home')
         return
       }
 
       setQRcodeStore({ base64, qr: QRcode })
-      console.log(user.id)
       setId(user.id)
 
       replace({

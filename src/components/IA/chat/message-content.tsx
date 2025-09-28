@@ -15,6 +15,7 @@ export function MessageContent() {
       initialNumToRender={5}
       windowSize={5}
       maxToRenderPerBatch={10}
+      updateCellsBatchingPeriod={50}
       renderItem={({ item }) => (
         <Message
           content={item.content}

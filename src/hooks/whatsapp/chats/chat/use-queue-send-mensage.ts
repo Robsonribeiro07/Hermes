@@ -33,6 +33,8 @@ export function useQueueSendMensage() {
             type: items.messages.type,
           })
 
+          removeFromQueue(items.messages.id)
+
           await new Promise((resolve) => setTimeout(resolve, 1500))
         } catch (error) {
           console.log('Error sending message from queue:', error)

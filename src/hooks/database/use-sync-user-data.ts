@@ -22,8 +22,7 @@ export function useSyncUserData() {
 
       return remoteData
     },
-    staleTime: 60 * 5 * 1000,
-    refetchOnWindowFocus: false,
+    staleTime: 60 * 1000,
   })
 
   useEffect(() => {
