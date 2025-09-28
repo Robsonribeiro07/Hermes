@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons'
 import { View } from 'moti'
 import React, { useRef, useState } from 'react'
-import { Image, Pressable, TouchableOpacity } from 'react-native'
+import { Pressable, TouchableOpacity } from 'react-native'
+import FastImage from 'react-native-fast-image'
 import Video from 'react-native-video'
 
 interface IVideoMedia {
@@ -37,26 +38,14 @@ export const VideoMedia = React.memo(({ uri, thumbnail }: IVideoMedia) => {
   const handleFullScren = () => setFullScreen((f) => !f)
 
   return thumbnail ? (
-    <Image source={{ uri }} width={300} height={300} />
+    <FastImage source={{ uri }} style={{ width: 300, height: 300 }} />
   ) : (
     <Pressable onPress={handleDoubleTap}>
       <View className="items-center justify-center relative p-1 overflow-hidden">
         {!isPlaying ? (
-          <Ionicons
-            name="pause"
-            className="absolute z-10"
-            size={50}
-            color="#fff"
-            onPress={togglePlayPause}
-          />
+          <Ionicons name="pause" className="absolute z-10" size={50} color="#fff" onPress={togglePlayPause} />
         ) : (
-          <Ionicons
-            name="play"
-            className="absolute z-10"
-            size={50}
-            color="#fff"
-            onPress={togglePlayPause}
-          />
+          <Ionicons name="play" className="absolute z-10" size={50} color="#fff" onPress={togglePlayPause} />
         )}
         <TouchableOpacity className="absolute bottom-0 right-0 z-10" onPress={handleFullScren}>
           <Ionicons name="expand" size={30} />

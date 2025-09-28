@@ -3,11 +3,20 @@ import { Dimensions } from 'react-native'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
+export interface ReactionReceived {
+  emoji: string
+  targetUser: string
+  fromMe: boolean
+  reactionUser: string
+  messageId: string
+}
 export interface Reaction {
   id: string
   emoji: string
   userId: string
   timestamp: Date
+  name?: string
+  fromMe: boolean
 }
 
 export interface Message {
@@ -163,7 +172,7 @@ export const useReactionStore = create<ReactionStore>()(
         }),
     }),
     {
-      name: 'reaction-storageebss',
+      name: 'reaction-storagesccvbcxss',
       storage: mmkvStorage,
     },
   ),

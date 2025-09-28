@@ -10,11 +10,11 @@ interface IThemedView extends ViewProps {
 export default function ThemedView({ darkColor, lightColor = '', ...props }: IThemedView) {
   const { colors, mode } = useTheme()
 
-  const colorTheme =
-    mode === 'dark' ? darkColor ?? colors.background : lightColor ?? colors.background
+  const colorTheme = mode === 'dark' ? darkColor ?? colors.background : lightColor ?? colors.background
 
   return (
     <View
+      className="flex-1"
       {...props}
       style={[
         {

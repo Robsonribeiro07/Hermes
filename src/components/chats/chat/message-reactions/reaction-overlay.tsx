@@ -1,18 +1,11 @@
 import { AlertDialog, AlertDialogBackdrop, AlertDialogContent } from '@/components/ui/alert-dialog'
-import { Reaction, useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
+import { Reaction, useReactionStore } from '@/store/whatsapp/chats/reactions/use-reaction-store'
 import { Ionicons } from '@expo/vector-icons'
 import { TouchableOpacity, useWindowDimensions } from 'react-native'
 import { Emojis } from '../sticker/Attachment-sticker/sections/Emojis/emojis'
 import { ReactionComponent } from './reaction'
 
-interface IReactionOverlayProps {
-  visible: boolean
-  touchPosition: { x: number; y: number }
-  onReactionSelect: (reaction: string) => void
-  onClose: () => void
-}
-
-const REACTIONS: Omit<Reaction, 'userId' | 'timestamp'>[] = [
+const REACTIONS: Omit<Reaction, 'userId' | 'timestamp' | 'fromMe'>[] = [
   {
     id: '1',
     emoji: '👍',
@@ -36,7 +29,7 @@ const REACTIONS: Omit<Reaction, 'userId' | 'timestamp'>[] = [
 ]
 
 export function ReactionOverlay() {
-  const { width } = useWindowDimensions()
+  const { width, height } = useWindowDimensions()
 
   const { elementPosition, open, setOpen, showAllReactions, setShollAllReactions } = useReactionStore()
   return (
@@ -53,8 +46,8 @@ export function ReactionOverlay() {
         style={{
           height: 50,
           width: width * 0.7,
-          left: elementPosition.x,
-          top: elementPosition.y,
+          left: open ? 50 : elementPosition.x,
+          top: open ? height * 0.5 : elementPosition.y,
         }}
       >
         {REACTIONS.map((reaction) => (

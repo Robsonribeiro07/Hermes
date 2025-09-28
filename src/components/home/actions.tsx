@@ -38,11 +38,7 @@ const Actions = ({ actions }: IActions) => {
   const IconComponent = action.library === 'Ionicons' ? Ionicons : AntDesign
 
   return (
-    <TouchableOpacity
-      className="w-[48%] mt-4 h-48 rounded-2xl items-center justify-center"
-      activeOpacity={0.6}
-      onPress={() => push('/(private)/chats/chat/[id]')}
-    >
+    <TouchableOpacity className="w-[48%] mt-4 h-48 rounded-2xl items-center justify-center" activeOpacity={0.6} onPress={() => push('/(private)/chats')}>
       <ThemedView className="w-full mt-4 h-48 rounded-2xl items-center justify-center" lightColor={colors.lightBlue} darkColor={colors.lightBlue}>
         <View className="flex-col items-center">
           <IconComponent name={action.icon as any} size={30} color={colors.blueText} />

@@ -1,7 +1,7 @@
 import { Box } from '@/components/ui/box'
 import { useLongPressGesture } from '@/hooks/use-long-press'
 import { IContentMessage } from '@/store/whatsapp/chats/chat-message-store'
-import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
+import { useReactionStore } from '@/store/whatsapp/chats/reactions/use-reaction-store'
 import React, { useCallback, useMemo } from 'react'
 import { View } from 'react-native'
 import { GestureDetector } from 'react-native-gesture-handler'
@@ -13,7 +13,6 @@ import { ToForwardMessage } from './to-forward-message'
 function MessageChatComponent({ content, date, id, fromMe, type = 'text', imgUrl, sending, mimyType, gifPlayback }: IContentMessage) {
   const ComponentRenderMedia = mediaMap[type]
   const { setOpen, addElementPosition, setRecentMessageId } = useReactionStore()
-  const { userMessages } = useReactionStore()
   const newDate = useMemo(() => new Date(date), [date])
 
   const handleLongPress = useCallback(

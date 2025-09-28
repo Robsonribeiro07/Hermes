@@ -1,7 +1,8 @@
 import { sendMessage } from '@/api/user/whatasapp/send-message'
+import { useSyncUserData } from '@/hooks/database/use-sync-user-data'
 import { typeDataReceived, useChatStore } from '@/store/whatsapp/chats/chat-message-store'
 import { useMessageQueue } from '@/store/whatsapp/chats/message-queue'
-import { useReactionStore } from '@/store/whatsapp/chats/use-reaction-store'
+import { useReactionStore } from '@/store/whatsapp/chats/reactions/use-reaction-store'
 import { useMutation } from '@tanstack/react-query'
 import { useMemo } from 'react'
 import { useSound } from '../../sound/use-sound-notification'
@@ -11,7 +12,9 @@ export function useSendMessageMutation() {
   const { addToQueue, removeFromQueue } = useMessageQueue()
   const { recentMessageId, addReaction, setOpen } = useReactionStore()
   const { playSound } = useSound()
+  const { data: UserData } = useSyncUserData()
 
+  console.log(UserData?.jid)
   const currentMessage = useMemo(() => {
     return messageToSend?.find((m) => m.user.id === userIdtemp)
   }, [messageToSend, userIdtemp])
@@ -68,9 +71,11 @@ export function useSendMessageMutation() {
             playSound('reaction')
             addReaction(destination, messageId, {
               id: messageId,
+              name: UserData?.id,
               emoji: message,
               timestamp: new Date(),
-              userId: participantId,
+              userId: UserData?.jid || '',
+              fromMe: true,
             })
           }
           break

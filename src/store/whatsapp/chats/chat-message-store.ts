@@ -2,6 +2,7 @@ import { mmkvStorage } from '@/database/MMKV/conctact'
 import { MediaType } from '@/database/whatsapp/Media/typed-media'
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
+import { ReactionReceived } from './reactions/use-reaction-store'
 
 export type IContentMessage = {
   content: string
@@ -27,6 +28,7 @@ export type IUserMessage = {
 export type typeDataReceived = {
   user: IUserMessage
   message: IContentMessage
+  reaction?: ReactionReceived
 }
 
 export interface IUserChat {
@@ -150,7 +152,7 @@ export const useChatStore = create<IChatStore>()(
                 ...m,
                 message: {
                   ...m.message,
-                  content: m.message.content + emoji, // concatena o emoji
+                  content: m.message.content + emoji,
                 },
               }
             }
@@ -165,6 +167,6 @@ export const useChatStore = create<IChatStore>()(
         })),
     }),
 
-    { name: 'chat-2bbb', storage: mmkvStorage },
+    { name: 'chat-2bbb2v', storage: mmkvStorage },
   ),
 )

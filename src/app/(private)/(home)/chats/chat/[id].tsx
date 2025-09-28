@@ -1,9 +1,10 @@
-import { ContentMessage } from '@/components/chat/chats/content-message'
-import { Footer } from '@/components/chat/chats/Footer/footer'
-import { HeaderChat } from '@/components/chat/chats/header'
-import { ReactionOverlay } from '@/components/chat/chats/message-reactions/reaction-overlay'
-import { SearchMessages } from '@/components/chat/chats/search-messages'
-import { ContentAttachmmentSticker } from '@/components/chat/chats/sticker/Attachment-sticker/content'
+import { ContentMessage } from '@/components/chats/chat/content-message'
+import { Footer } from '@/components/chats/chat/Footer/footer'
+import { HeaderChat } from '@/components/chats/chat/header'
+import { ReactionOverlay } from '@/components/chats/chat/message-reactions/reaction-overlay'
+import { ShowReactionsMessage } from '@/components/chats/chat/message-reactions/show-reactions-message'
+import { SearchMessages } from '@/components/chats/chat/search-messages'
+import { ContentAttachmmentSticker } from '@/components/chats/chat/sticker/Attachment-sticker/content'
 import ThemedView from '@/components/theme/themed-view'
 import { useBackHandler } from '@/hooks/use-back-handler'
 import { useChatStore } from '@/store/whatsapp/chats/chat-message-store'
@@ -35,7 +36,7 @@ export default function Chat() {
   })
 
   return (
-    <ImageBackground className="flex-1" source={require('../../../../assets/images/background-chat.jpeg')}>
+    <ImageBackground className="flex-1" source={require('../../../../../assets/images/background-chat.jpeg')}>
       <ThemedView className="flex-1 ">
         {showSearch && <SearchMessages />}
 
@@ -51,6 +52,7 @@ export default function Chat() {
 
           <Footer userId="557582598725@s.whatsapp.net" />
           <ContentAttachmmentSticker />
+          <ShowReactionsMessage />
           <ReactionOverlay />
         </KeyboardAvoidingView>
       </ThemedView>
